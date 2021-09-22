@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  appUrl: 'http://communitygta.pythonanywhere.com',
+  appUrl: 'https://communitygta.pythonanywhere.com',
 };

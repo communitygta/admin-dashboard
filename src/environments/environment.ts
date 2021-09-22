@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  appUrl: 'http://communitygta.pythonanywhere.com',
+  appUrl: 'https://communitygta.pythonanywhere.com',
 };
 
 /*
