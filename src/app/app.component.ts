@@ -81,7 +81,7 @@ export class AppComponent implements OnInit {
           title: 'Organization',
           url:
             '/organizations/' +
-            this.authService.userProfile$.getValue().profile.organization,
+            this.authService.userProfile$.getValue().profile.organization.id,
           icon: 'paper-plane',
         });
         this.menu.push({

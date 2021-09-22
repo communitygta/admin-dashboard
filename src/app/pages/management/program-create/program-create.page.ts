@@ -45,11 +45,11 @@ export class ProgramCreatePage implements OnInit {
   ngOnInit() {
     if (this.authService.userRole === UserRole.organizationAdmin) {
       this.organizationId =
-        this.authService.userProfile$.getValue().profile.organization;
+        this.authService.userProfile$.getValue().profile.organization.id;
     }
 
     if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
-      this.getOrganizationSelections(this.authService.userProfile$.getValue().profile.neighbourhood);
+      this.getOrganizationSelections(this.authService.userProfile$.getValue().profile.neighbourhood.id);
     }
 
     this.initForm();

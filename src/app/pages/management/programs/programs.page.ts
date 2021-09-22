@@ -74,7 +74,7 @@ export class ProgramsPage implements OnInit {
     if (this.authService.userRole === UserRole.organizationAdmin) {
       this.dashboardService
         .getProgramsByOrganization(
-          this.authService.userProfile$.getValue().profile.organization
+          this.authService.userProfile$.getValue().profile.organization.id
         )
         .pipe(pluck('results'))
         .subscribe((res) => {
@@ -85,7 +85,7 @@ export class ProgramsPage implements OnInit {
 
     if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
       const neighbourhoodId =
-        this.authService.userProfile$.getValue().profile.neighbourhood;
+        this.authService.userProfile$.getValue().profile.neighbourhood.id;
       this.getOrganizationSelections(neighbourhoodId);
       this.dashboardService
         .getProgramsByNeighbourhood(neighbourhoodId)

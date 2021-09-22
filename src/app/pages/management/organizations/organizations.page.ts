@@ -33,7 +33,7 @@ export class OrganizationsPage implements OnInit {
     if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
       this.dashboardService
         .getOrganizationsByNeighbourhoodId(
-          this.authService.userProfile$.getValue().profile.neighbourhood
+          this.authService.userProfile$.getValue().profile.neighbourhood.id
         )
         .pipe(pluck('results'))
         .subscribe((res) => {

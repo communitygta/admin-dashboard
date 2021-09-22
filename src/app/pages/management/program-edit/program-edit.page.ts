@@ -70,7 +70,7 @@ export class ProgramEditPage implements OnInit {
   ngOnInit() {
     if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
       this.getOrganizationSelections(
-        this.authService.userProfile$.getValue().profile.neighbourhood
+        this.authService.userProfile$.getValue().profile.neighbourhood.id
       );
     }
 
@@ -78,7 +78,7 @@ export class ProgramEditPage implements OnInit {
       this.currentOrganization = this.appService.appData.Organization.find(
         (item) =>
           item.id ===
-          this.authService.userProfile$.getValue().profile.organization
+          this.authService.userProfile$.getValue().profile.organization.id
       );
     }
   }

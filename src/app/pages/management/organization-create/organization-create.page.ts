@@ -38,7 +38,7 @@ export class OrganizationCreatePage implements OnInit {
 
   ngOnInit() {
     if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
-      this.neighbourhoodId = this.authService.userProfile$.getValue().profile.neighbourhood;
+      this.neighbourhoodId = this.authService.userProfile$.getValue().profile.neighbourhood.id;
     }
 
     this.initForm();
