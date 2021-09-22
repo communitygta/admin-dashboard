@@ -33,6 +33,10 @@ export class DashboardService {
     return this.http.put(API.PREFIX + API.GET_ORGANIZATIONS + `${organization.id}/`, organization);
   }
 
+  createOrganization(organization): Observable<any> {
+    return this.http.post(API.PREFIX + API.GET_ORGANIZATIONS, organization);
+  }
+
   addOrganizationVideoLink(payload): Observable<any> {
     return this.http.post(API.PREFIX + API.ADD_ORGANIZATION_VIDEO_LINK, payload);
   }
@@ -56,11 +60,15 @@ export class DashboardService {
   // programs
 
   getProgramsByOrganization(organizationId: any): Observable<any> {
-    return this.http.get(API.PREFIX + API.GET_PROGRAMS + '?organization=' + organizationId);
+    return this.http.get(API.PREFIX + API.GET_PROGRAMS_LIST + '?organization=' + organizationId);
+  }
+
+  getProgramsByNeighbourhood(neighbourhoodId: any): Observable<any> {
+    return this.http.get(API.PREFIX + API.GET_PROGRAMS_LIST + '?neighbourhood=' + neighbourhoodId);
   }
 
   getProgramById(id): Observable<any> {
-    return this.http.get(API.PREFIX + API.GET_PROGRAMS + `${id}/`);
+    return this.http.get(API.PREFIX + API.GET_PROGRAMS_LIST + `${id}/`);
   }
 
   addProgramVideoLink(payload): Observable<any> {

@@ -8,6 +8,24 @@
             padding: 10px 0;
             position: relative;
 
+            .logo-wrapper {
+                border-radius: 10px;
+                border: 1px solid #dddddd;
+                margin: 10px 0 0 20px;
+                display: flex;
+                flex-direction: column;
+                width: fit-content;
+                padding: 10px 20px;
+                justify-content: center;
+                align-items: center;
+
+                p {
+                    margin: 0;
+                    font-size: 14px;
+                    color: #707070;
+                }
+            }
+
             .status {
                 position: absolute;
                 top: 20px;

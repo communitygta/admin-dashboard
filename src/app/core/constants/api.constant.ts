@@ -4,6 +4,8 @@ export const API = {
     APP_INFO: 'v1/general-app-info',
     LOGIN: 'login/',
     USER_PROFILE: 'profile/',
+    UPDATE_PASSWORD: 'update-password/',
+    GET_USERS_BY_NEIGHBOURHOOD: 'get-users-list/',
     // organizations
     GET_ORGANIZATIONS: 'v1/organizations/',
     UPDATE_ORGANIZATION_LOGO: 'v1/organization-logo-update/',
@@ -13,6 +15,7 @@ export const API = {
     REMOVE_ORGANIZATION_IMAGE: 'v1/organization-images/',
     // programs
     GET_PROGRAMS: 'v2/programs/',
+    GET_PROGRAMS_LIST: 'v3/programs/',
     UPDATE_PROGRAM: 'v2/programs/',
     ADD_PROGRAM_VIDEO_LINK: 'v1/program-video-links/',
     REMOVE_PROGRAM_VIDEO_LINK: 'v1/program-video-links/',

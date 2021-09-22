@@ -1,0 +1,35 @@
+:host {
+    ion-content {
+        .wrapper {
+            display: flex;
+            align-items: self-start;
+            flex-wrap: wrap;
+
+            .content-wrapper {
+                margin: 30px;
+                border-radius: 15px;
+                box-shadow: 0px 3px 10px rgb(0 0 0 / 20%);
+                overflow: hidden;
+                padding: 10px 0;
+                position: relative;
+                max-width: 350px;
+
+                ion-item {
+                    ion-label {
+                        font-size: 14px;
+                        color: #444444;
+                    }
+
+                    ion-note {
+                        font-size: 13px;
+                        color: #707070;
+                    }
+                }
+
+                &.update-password {
+                    width: 300px;
+                }
+            }
+        }
+    }
+}

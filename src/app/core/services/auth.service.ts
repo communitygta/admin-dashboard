@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -32,9 +33,17 @@ export class AuthService {
     );
   }
 
+  updatePassword(payload: { old_password: string; new_password: string }): Observable<any> {
+    return this.http.put(API.PREFIX + API.UPDATE_PASSWORD, payload);
+  }
+
   logout() {
     localStorage.clear();
     this.isAuth$.next(false);
+  }
+
+  getUsersByNeighbourhood(): Observable<any> {
+    return this.http.get(API.PREFIX + API.GET_USERS_BY_NEIGHBOURHOOD);
   }
 
   getUserProfile(): Observable<any> {

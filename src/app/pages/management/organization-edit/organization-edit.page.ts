@@ -70,11 +70,7 @@ export class OrganizationEditPage implements OnInit {
       logo: [null],
       mission: [null],
       name: [null],
-      neighbourhood: this.fb.group({
-        id: [null],
-        name: [null],
-        total_population: [null],
-      }),
+      neighbourhood: [null],
       part_time_staff: [null],
       phone: [null],
       postal_code: [null],
@@ -189,7 +185,6 @@ export class OrganizationEditPage implements OnInit {
   save() {
     const payload = Object.assign({}, this.form.value);
     delete payload.logo;
-    delete payload.neighbourhood;
     const selectedLanguages = this.languages.filter(
       (language) => language.selected
     );

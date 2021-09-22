@@ -4,9 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { OrganizationCreatePageRoutingModule } from './organization-create-routing.module';
+import { UserProfilePageRoutingModule } from './user-profile-routing.module';
 
-import { OrganizationCreatePage } from './organization-create.page';
+import { UserProfilePage } from './user-profile.page';
 
 @NgModule({
   imports: [
@@ -14,8 +14,8 @@ import { OrganizationCreatePage } from './organization-create.page';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    OrganizationCreatePageRoutingModule
+    UserProfilePageRoutingModule
   ],
-  declarations: [OrganizationCreatePage]
+  declarations: [UserProfilePage]
 })
-export class OrganizationCreatePageModule {}
+export class UserProfilePageModule {}

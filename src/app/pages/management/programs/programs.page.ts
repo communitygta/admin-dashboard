@@ -1,14 +1,7 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { IonInput } from '@ionic/angular';
-import { fromEvent, Observable } from 'rxjs';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  filter,
-  map,
-  pluck,
-  switchMap,
-} from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { pluck } from 'rxjs/operators';
+import { AppService } from 'src/app/core/services/app.service';
 import { AuthService, UserRole } from 'src/app/core/services/auth.service';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
 
@@ -19,31 +12,83 @@ import { DashboardService } from 'src/app/core/services/dashboard.service';
 })
 export class ProgramsPage implements OnInit {
   programs$: Observable<any>;
-  programs;
-  oriPrograms;
-  filterInput;
+  programs: Array<any>;
+  oriPrograms: Array<any>;
+  filterInput: string;
+  selectedOrganization;
+  userRole: UserRole;
+  availableOrganizations: Array<any>;
 
   constructor(
     private authService: AuthService,
     private dashboardService: DashboardService,
-    private ref: ChangeDetectorRef
+    private appService: AppService
   ) {}
 
   ngOnInit() {}
 
-  onFilter(event) {
-    const inputValue = event.target.value;
-    this.programs = this.oriPrograms.filter(
-      (program) =>program.name.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
+  getOrganizationSelections(neighbourhoodId) {
+    this.availableOrganizations = this.appService.appData.Organization.filter(
+      (item) => item.neighbourhood?.id === neighbourhoodId
     );
   }
 
+  onFilter(event) {
+    const inputValue = event.target.value;
+    this.programs = this.oriPrograms.filter((program) => {
+      if (+this.selectedOrganization) {
+        return (
+          program.name
+            .toLowerCase()
+            .indexOf(inputValue.trim().toLowerCase()) !== -1 &&
+          program.organization?.id === +this.selectedOrganization
+        );
+      } else {
+        return (
+          program.name
+            .toLowerCase()
+            .indexOf(inputValue.trim().toLowerCase()) !== -1
+        );
+      }
+    });
+  }
+
+  onSelect(event) {
+    const inputValue = event.target.value;
+    this.programs = this.oriPrograms.filter((program) => {
+      if (this.filterInput && this.filterInput.trim()) {
+        return (
+          program.name
+            .toLowerCase()
+            .indexOf(this.filterInput.trim().toLowerCase()) !== -1 &&
+          (program.organization?.id === +inputValue || !+inputValue)
+        );
+      } else {
+        return program.organization?.id === +inputValue || !+inputValue;
+      }
+    });
+  }
+
   ionViewWillEnter() {
+    this.userRole = this.authService.userRole;
     if (this.authService.userRole === UserRole.organizationAdmin) {
       this.dashboardService
         .getProgramsByOrganization(
           this.authService.userProfile$.getValue().profile.organization
         )
+        .pipe(pluck('results'))
+        .subscribe((res) => {
+          this.programs = res;
+          this.oriPrograms = res;
+        });
+    }
+
+    if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
+      const neighbourhoodId =
+        this.authService.userProfile$.getValue().profile.neighbourhood;
+      this.getOrganizationSelections(neighbourhoodId);
+      this.dashboardService
+        .getProgramsByNeighbourhood(neighbourhoodId)
         .pipe(pluck('results'))
         .subscribe((res) => {
           this.programs = res;

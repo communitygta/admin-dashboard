@@ -17,7 +17,11 @@
 
     <div class="content-wrapper">
 
-      <img [src]="organization.logo" *ngIf="organization.logo" style="margin: 20px;" width="200">
+      <div class="logo-wrapper">
+        <img [src]="organization.logo" *ngIf="organization.logo" width="200">
+        <img src="assets/images/no-image.svg" *ngIf="!organization.logo" width="64">
+        <p *ngIf="!organization.logo">No logo image</p>
+      </div>
 
       <div class="form-item width-50">
         <div class="item-label">

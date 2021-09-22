@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>User List</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="content-wrapper" *ngIf="users$ | async as users">
+    <ion-item *ngFor="let user of users">
+      <ion-label class="ion-text-wrap"> {{ user.user.username }} <br> <ion-note>{{ user.user.email || 'N/A' }}</ion-note></ion-label>
+      <ion-label slot="end">{{ user.organization.name }}</ion-label>
+    </ion-item>
+  </div>
+
+</ion-content>

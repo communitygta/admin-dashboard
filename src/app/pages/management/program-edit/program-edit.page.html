@@ -62,6 +62,19 @@
           <ion-input formControlName="how_to_apply"></ion-input>
         </ion-item>
 
+        <ion-item lines="full" *ngIf="availableOrganizations">
+          <ion-label position="stacked">Select an organization</ion-label>
+          <ion-select placeholder="Select" formControlName="organization">
+            <ion-select-option *ngFor="let availableOrganization of availableOrganizations;"
+              [value]="availableOrganization.id">{{ availableOrganization.name }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item *ngIf="currentOrganization">
+          <ion-label position="stacked">Organization</ion-label>
+          <ion-input readonly [value]="currentOrganization.name"></ion-input>
+        </ion-item>
+
         <ion-item lines="full">
           <ion-label position="stacked">Languages</ion-label>
           <div class="languages-selection">

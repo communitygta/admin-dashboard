@@ -1,16 +1,29 @@
-<ng-container *ngIf="organizations$ | async as organizations">
+<ng-container *ngIf="organizations">
   <ion-header>
     <ion-toolbar color="light">
       <ion-title>{{ organizations?.length }} Organizations</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="solid" expand="block" color="primary" [routerLink]="['/organization-create']">
+          <ion-icon name="add-outline"></ion-icon> &nbsp; Create
+        </ion-button>
+      </ion-buttons>
     </ion-toolbar>
   </ion-header>
 
   <ion-content>
+    <div class="content-wrapper filter">
+      <ion-item>
+        <ion-input clearInput (ionChange)="onFilter($event)" placeholder="filter by organization name"></ion-input>
+      </ion-item>
+    </div>
+
     <div class="content-wrapper">
       <ion-item *ngFor="let organization of organizations" button lines="full"
         [routerLink]="['/organizations', organization.id]">
         <ion-label> {{ organization.name }} </ion-label>
+        <ion-note slot="end">Programs: {{ organization.total_programs }}</ion-note>
       </ion-item>
+      <ion-item *ngIf="!organizations.length"><ion-label>No results</ion-label></ion-item>
     </div>
   </ion-content>
 </ng-container>

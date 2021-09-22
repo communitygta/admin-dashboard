@@ -3,7 +3,7 @@
   <ion-header>
     <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-back-button defaultHref="organization" text=""></ion-back-button>
+        <ion-back-button [defaultHref]="'organizations/' + organization.id" text=""></ion-back-button>
       </ion-buttons>
       <ion-title>Edit Organization</ion-title>
       <ion-buttons slot="end">
@@ -18,8 +18,12 @@
 
     <div class="content-wrapper">
       <form [formGroup]="form">
-        <img [src]="logo.value" *ngIf="logo.value" width="200" (click)="logoInput.click()">
-        <input type="file" #logoInput (change)="onChange($event)" hidden accept="image/jpg, image/jpeg, image/png">
+        <div class="logo-wrapper">
+          <img [src]="logo.value" *ngIf="logo.value" width="200">
+          <img [src]="defaultNewImageUrl" *ngIf="!logo.value" width="64">
+          <input type="file" #logoInput (change)="onChange($event)" hidden accept="image/jpg, image/jpeg, image/png">
+          <div class="edit-overlay" title="Edit logo" (click)="logoInput.click()"><ion-icon size="large" color="primary" name="create"></ion-icon></div>
+        </div>
 
         <ion-item>
           <ion-label position="stacked">Name</ion-label>
@@ -88,11 +92,6 @@
           <ion-label position="stacked">Founded</ion-label>
           <ion-input formControlName="founded"></ion-input>
         </ion-item>
-
-        <!-- <ion-item [formGroup]="form.controls.neighbourhood">
-          <ion-label position="stacked">Neighbourhood</ion-label>
-          <ion-input readonly [value]="form.controls.neighbourhood.controls.name.value"></ion-input>
-        </ion-item> -->
 
         <ion-item>
           <ion-label position="stacked">View Count</ion-label>

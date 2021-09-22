@@ -1,10 +1,10 @@
 <ion-app>
-  <ion-split-pane contentId="main-content" [when]="isAuth">
+  <ion-split-pane contentId="main-content" mode="md" [when]="isAuth">
     <ion-menu contentId="main-content" type="overlay">
       <ion-content>
         <ion-list id="inbox-list" *ngIf="userProfile$ | async as userProfile">
           <ion-list-header>Community GTA</ion-list-header>
-          
+
           <ion-label class="user-role" *ngIf="authService.userRole === 0">Super User</ion-label>
           <ion-label class="user-role" *ngIf="authService.userRole === 1">Neighbourhood Admin</ion-label>
           <ion-label class="user-role" *ngIf="authService.userRole === 2">Organization Admin</ion-label>
@@ -21,7 +21,20 @@
         </ion-list>
 
         <ion-list id="labels-list">
-          <ion-button fill="outline" expand="block" color="danger" (click)="logout()"><ion-icon name="log-out-outline"></ion-icon> &nbsp; Log out</ion-button>
+
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of submenu; let i = index">
+            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false"
+              routerLinkActive="selected">
+              <ion-icon slot="start" [name]="p.icon + '-outline'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
+          <ion-button style="margin-top: 40px;" mode="ios" fill="outline" expand="block" color="danger"
+            (click)="logout()">
+            <ion-icon name="log-out-outline"></ion-icon> &nbsp; Log out
+          </ion-button>
+
         </ion-list>
       </ion-content>
     </ion-menu>

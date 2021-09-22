@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { NavController } from '@ionic/angular';
 import { AppService } from 'src/app/core/services/app.service';
 import { AuthService, UserRole } from 'src/app/core/services/auth.service';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
@@ -27,6 +28,7 @@ export class ProgramCreatePage implements OnInit {
     this.defaultNewImageUrl
   );
   organizationId;
+  availableOrganizations: Array<any>;
 
   constructor(
     private dashboardService: DashboardService,
@@ -34,7 +36,8 @@ export class ProgramCreatePage implements OnInit {
     private inAppMessageService: InAppMessageService,
     private appService: AppService,
     private sanitizer: DomSanitizer,
-    private authService: AuthService
+    private authService: AuthService,
+    private navController: NavController,
   ) {
     this.initForm();
   }
@@ -43,6 +46,10 @@ export class ProgramCreatePage implements OnInit {
     if (this.authService.userRole === UserRole.organizationAdmin) {
       this.organizationId =
         this.authService.userProfile$.getValue().profile.organization;
+    }
+
+    if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
+      this.getOrganizationSelections(this.authService.userProfile$.getValue().profile.neighbourhood);
     }
 
     this.initForm();
@@ -65,6 +72,12 @@ export class ProgramCreatePage implements OnInit {
       neighbourhood.selected = false;
       return neighbourhood;
     });
+  }
+
+  getOrganizationSelections(neighbourhoodId) {
+    this.availableOrganizations = this.appService.appData.Organization.filter(
+      (item) => item.neighbourhood?.id === neighbourhoodId
+    );
   }
 
   initForm() {
@@ -206,9 +219,11 @@ export class ProgramCreatePage implements OnInit {
     this.dashboardService.createProgram(payload).subscribe((res) => {
       this.inAppMessageService.simpleAlert(
         'Message',
-        'Program has been created.'
+        'Program has been created.',
+        'OK',
+        false,
+        () => this.navController.navigateForward(`program-edit/${res.id}`)
       );
-      this.form.markAsPristine();
     });
   }
 }

@@ -5,6 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { AppService } from 'src/app/core/services/app.service';
+import { AuthService, UserRole } from 'src/app/core/services/auth.service';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
 import { InAppMessageService } from 'src/app/core/services/in-app-message.service';
 import { environment } from 'src/environments/environment';
@@ -26,6 +27,8 @@ export class ProgramEditPage implements OnInit {
   newImageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
     this.defaultNewImageUrl
   );
+  availableOrganizations: Array<any>;
+  currentOrganization;
   program$ = this.dashboardService
     .getProgramById(this.activatedRoute.snapshot.params.id)
     .pipe(
@@ -43,9 +46,7 @@ export class ProgramEditPage implements OnInit {
           return populationGroup;
         });
         this.focuses.map((focus) => {
-          focus.selected = !!res.focuses.find(
-            (item) => item.id === focus.id
-          );
+          focus.selected = !!res.focuses.find((item) => item.id === focus.id);
           return focus;
         });
         this.form.patchValue(res);
@@ -60,15 +61,36 @@ export class ProgramEditPage implements OnInit {
     private fb: FormBuilder,
     private inAppMessageService: InAppMessageService,
     private appService: AppService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private authService: AuthService
   ) {
     this.initForm();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
+      this.getOrganizationSelections(
+        this.authService.userProfile$.getValue().profile.neighbourhood
+      );
+    }
+
+    if (this.authService.userRole === UserRole.organizationAdmin) {
+      this.currentOrganization = this.appService.appData.Organization.find(
+        (item) =>
+          item.id ===
+          this.authService.userProfile$.getValue().profile.organization
+      );
+    }
+  }
 
   get logo() {
     return this.form.controls.logo;
+  }
+
+  getOrganizationSelections(neighbourhoodId) {
+    this.availableOrganizations = this.appService.appData.Organization.filter(
+      (item) => item.neighbourhood?.id === neighbourhoodId
+    );
   }
 
   initForm() {
@@ -86,9 +108,7 @@ export class ProgramEditPage implements OnInit {
       location: [null],
       name: [null],
       neighbourhoods: [null],
-      organization: this.fb.group({
-        id: [null],
-      }),
+      organization: [null],
       population_groups: [null],
       staff_contact: [null],
       staff_name: [null],
@@ -114,7 +134,7 @@ export class ProgramEditPage implements OnInit {
   }
 
   removeVideoLink(videoLink, program, index) {
-    this.dashboardService.removeProgramVideoLink(videoLink).subscribe(_ => {
+    this.dashboardService.removeProgramVideoLink(videoLink).subscribe((_) => {
       program.video_links.splice(index, 1);
     });
   }
@@ -153,7 +173,9 @@ export class ProgramEditPage implements OnInit {
   newImageOnChange(event) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.newImageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(file));
+      this.newImageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+        URL.createObjectURL(file)
+      );
       this.addImageForm.get('image').setValue(file);
     }
   }
@@ -178,12 +200,9 @@ export class ProgramEditPage implements OnInit {
   }
 
   removeImage(image, program, index) {
-    this.dashboardService.removeProgramImage(image).subscribe(_ => {
+    this.dashboardService.removeProgramImage(image).subscribe((_) => {
       program.images.splice(index, 1);
-      this.inAppMessageService.simpleToast(
-        'Removed.',
-        'bottom'
-      );
+      this.inAppMessageService.simpleToast('Removed.', 'bottom');
     });
   }
 
@@ -196,13 +215,10 @@ export class ProgramEditPage implements OnInit {
     const selectedPopulationGroups = this.populationGroups.filter(
       (populationGroup) => populationGroup.selected
     );
-    const selectedFocuses = this.focuses.filter(
-      (focus) => focus.selected
-    );
+    const selectedFocuses = this.focuses.filter((focus) => focus.selected);
     payload.languages = selectedLanguages;
     payload.population_groups = selectedPopulationGroups;
     payload.focuses = selectedFocuses;
-    payload.organization = payload.organization.id;
     this.dashboardService.updateProgram(payload).subscribe((res) => {
       this.inAppMessageService.simpleAlert(
         'Message',

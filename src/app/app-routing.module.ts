@@ -75,6 +75,14 @@ const routes: Routes = [
         './pages/management/organization-create/organization-create.module'
       ).then((m) => m.OrganizationCreatePageModule),
   },
+  {
+    path: 'user-profile',
+    loadChildren: () => import('./pages/users/user-profile/user-profile.module').then( m => m.UserProfilePageModule)
+  },
+  {
+    path: 'user-list',
+    loadChildren: () => import('./pages/users/user-list/user-list.module').then( m => m.UserListPageModule)
+  },
 ];
 
 @NgModule({

@@ -1,9 +1,97 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>organization-create</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="'organizations'" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Create Organization</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="solid" expand="block" color="primary" [disabled]="!form.dirty" (click)="create()">
+        <ion-icon name="save-outline"></ion-icon> &nbsp; Create
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+
+  <div class="content-wrapper">
+    <form [formGroup]="form">
+      <!-- <div class="logo-wrapper">
+        <img [src]="logo.value" *ngIf="logo.value" width="200" (click)="logoInput.click()">
+        <input type="file" #logoInput (change)="onChange($event)" hidden accept="image/jpg, image/jpeg, image/png">
+        <div class="edit-overlay"><ion-icon size="large" color="primary" name="create"></ion-icon></div>
+      </div> -->
+
+      <ion-item>
+        <ion-label position="stacked">Name</ion-label>
+        <ion-input formControlName="name"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Mission</ion-label>
+        <ion-textarea formControlName="mission" autoGrow></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input formControlName="email"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Phone</ion-label>
+        <ion-input formControlName="phone"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Website</ion-label>
+        <ion-input formControlName="website"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Address</ion-label>
+        <ion-input formControlName="address"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Postal Code</ion-label>
+        <ion-input formControlName="postal_code"></ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="stacked">Languages</ion-label>
+        <div class="languages-selection">
+          <ion-button (click)="toggleLanguage(language)" fill="outline" [class.selected]="language.selected"
+            *ngFor="let language of languages">{{ language.name }}</ion-button>
+        </div>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Charity Number</ion-label>
+        <ion-input formControlName="charity_number"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Profile Code</ion-label>
+        <ion-input formControlName="profile_code"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Full-time Staff</ion-label>
+        <ion-input formControlName="full_time_staff"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Part-time Staff</ion-label>
+        <ion-input formControlName="part_time_staff"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Founded</ion-label>
+        <ion-input formControlName="founded"></ion-input>
+      </ion-item>
+
+    </form>
+
+  </div>
 
 </ion-content>

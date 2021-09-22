@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>User Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="wrapper">
+    <div class="content-wrapper">
+
+      <ion-item lines="none">
+        <ion-label>User Name</ion-label>
+        <ion-note slot="end">{{ userProfile.username }}</ion-note>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label>Role</ion-label>
+        <ion-note slot="end">{{ userProfile.role }}</ion-note>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label>Managing</ion-label>
+        <ion-note slot="end">{{ userProfile.managing.name }}</ion-note>
+      </ion-item>
+
+      <!-- <ion-item lines="none">
+        <ion-label>Email</ion-label>
+        <ion-note slot="end">{{ userProfile.email || 'N/A' }}</ion-note>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label>First Name</ion-label>
+        <ion-note slot="end">{{ userProfile.firstname || 'N/A' }}</ion-note>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label>Last Name</ion-label>
+        <ion-note slot="end">{{ userProfile.lastname || 'N/A' }}</ion-note>
+      </ion-item> -->
+    </div>
+
+    <form class="content-wrapper update-password" (ngSubmit)="updatePassword(oldPassword.value, newPassword.value)">
+      <ion-item>
+        <ion-label position="floating">Old Password</ion-label>
+        <ion-input type="password" required #oldPassword></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">New Password</ion-label>
+        <ion-input type="password" required #newPassword></ion-input>
+      </ion-item>
+      <ion-button mode="md" style="margin: 20px 20px 10px 0;float: right;"
+        (click)="updatePassword(oldPassword.value, newPassword.value)">Update password</ion-button>
+    </form>
+  </div>
+
+</ion-content>
