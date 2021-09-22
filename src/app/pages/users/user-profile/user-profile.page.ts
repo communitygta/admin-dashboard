@@ -50,13 +50,13 @@ export class UserProfilePage implements OnInit {
     if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
       this.userProfile.role = 'Neighbourhood Administrator';
       this.userProfile.managing = this.appService.appData.Neighbourhood.find(
-        (item) => item.id === userProfile.profile.neighbourhood
+        (item) => item.id === userProfile.profile.neighbourhood.id
       );
     }
     if (this.authService.userRole === UserRole.organizationAdmin) {
       this.userProfile.role = 'Organization Administrator';
       this.userProfile.managing = this.appService.appData.Organization.find(
-        (item) => item.id === userProfile.profile.organization
+        (item) => item.id === userProfile.profile.organization.id
       );
     }
   }
