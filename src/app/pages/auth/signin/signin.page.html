@@ -1,0 +1,25 @@
+<ion-content>
+  <h1>Sign in</h1>
+  <form [formGroup]="form" (ngSubmit)="login()">
+    <!-- user key -->
+    <ion-item lines="none">
+      <ion-icon name="person-outline" size="small" color="medium" slot="start"></ion-icon>
+      <ion-input autocapitalize="off" autocorrect="off" type="text" placeholder="User Name" formControlName="username"
+        clear-input="true" autocomplete="off"></ion-input>
+    </ion-item>
+
+    <!-- password -->
+    <ion-item lines="none">
+      <ion-icon name="lock-closed-outline" size="small" color="medium" slot="start"></ion-icon>
+      <ion-input autocapitalize="off" autocorrect="off" [type]="passwordVisible ? 'text' : 'password'"
+        placeholder="Password" formControlName="password" clear-input="true"
+        autocomplete="off" (keyup.enter)="login()"></ion-input>
+      <ion-icon slot="end" color="medium" style="font-size: 16px;" [name]="passwordVisible ? 'eye-outline' : 'eye-off-outline'"
+        class="passwordIcon" (click)='passwordVisible = !passwordVisible'></ion-icon>
+    </ion-item>
+
+    <!-- log in button -->
+    <ion-button type="submit" expand="block" color="primary" [disabled]="form.touched && form.invalid">Sign In</ion-button>
+  </form>
+
+</ion-content>

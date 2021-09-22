@@ -1,0 +1,158 @@
+<ng-container *ngIf="program$ | async as program">
+
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="programs" text=""></ion-back-button>
+      </ion-buttons>
+      <ion-title>Program: {{ program.name }}</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="solid" expand="block" color="danger" (click)="removeProgram(program)">
+          <ion-icon name="trash-outline"></ion-icon> &nbsp; Delete
+        </ion-button>
+        <ion-button fill="solid" expand="block" color="primary" [routerLink]="['/program-edit', program.id]">
+          <ion-icon name="create-outline"></ion-icon> &nbsp; Edit
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+
+    <div class="content-wrapper">
+
+      <div class="status">
+        <ng-container *ngIf="program.enabled">
+          <ion-icon size="large" name="checkmark-circle" color="success"></ion-icon> Enabled
+        </ng-container>
+        <ng-container *ngIf="!program.enabled">
+          <ion-icon size="large" name="remove-circle" color="warning"></ion-icon> Disabled
+        </ng-container>
+        <ion-icon size="large" color="primary" name="eye" style="margin: 0 5px 0 20px;"></ion-icon> {{
+        program.view_count }} views
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Name
+        </div>
+        <ion-label>{{ program.name || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Description
+        </div>
+        <ion-label>{{ program.description || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Location
+        </div>
+        <ion-label>{{ program.location || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Eligibility
+        </div>
+        <ion-label>{{ program.eligibility || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Fee
+        </div>
+        <ion-label>{{ program.fee || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Frequency
+        </div>
+        <ion-label>{{ program.frequency || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          How To Apply
+        </div>
+        <ion-label>{{ program.how_to_apply || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Languages
+        </div>
+        <ion-label>
+          <ion-text *ngFor="let language of program.languages">{{ language.name }}</ion-text>
+          <ng-container *ngIf="program.languages.length === 0">N/A</ng-container>
+        </ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Focuses
+        </div>
+        <ion-label>
+          <ion-text *ngFor="let focus of program.focuses">{{ focus.name }}</ion-text>
+          <ng-container *ngIf="program.focuses.length === 0">N/A</ng-container>
+        </ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Population Groups
+        </div>
+        <ion-label>
+          <ion-text *ngFor="let population_group of program.population_groups">{{ population_group.name }}</ion-text>
+          <ng-container *ngIf="program.population_groups.length === 0">N/A</ng-container>
+        </ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Staff Name
+        </div>
+        <ion-label>{{ program.staff_name || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Staff Contact
+        </div>
+        <ion-label>{{ program.staff_contact || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Videos
+        </div>
+        <div class="videos">
+          <div class="video" *ngFor="let video_link of program.video_links">
+            {{ video_link.name }} <a [href]="video_link.link" target="_blank">{{video_link.link}}</a>
+          </div>
+          <ion-label *ngIf="program.video_links.length === 0">No videos</ion-label>
+        </div>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Images
+        </div>
+        <div class="images">
+          <ion-card *ngFor="let image of program.images">
+            <a [href]="image.image" target="_blank"><img [src]="image.image" /></a>
+            <ion-card-header>
+              <ion-card-title>{{ image.name }}</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+          <ion-label *ngIf="program.images.length === 0">No images</ion-label>
+        </div>
+      </div>
+
+    </div>
+
+  </ion-content>
+</ng-container>

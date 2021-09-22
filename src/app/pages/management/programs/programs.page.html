@@ -1,0 +1,36 @@
+<ng-container *ngIf="programs">
+
+  <ion-header>
+    <ion-toolbar color="light">
+      <ion-title>{{ programs?.length }} Programs</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="solid" expand="block" color="primary" [routerLink]="['/program-create']">
+          <ion-icon name="add-outline"></ion-icon> &nbsp; Create
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+
+    <div class="content-wrapper filter">
+      <ion-item>
+        <ion-input clearInput (ionChange)="onFilter($event)" placeholder="filter by name"></ion-input>
+      </ion-item>
+    </div>
+
+    <div class="content-wrapper">
+      <ion-item *ngFor="let program of programs" button lines="full" [routerLink]="['/programs', program.id]">
+        <ion-label class="ion-text-wrap"> {{ program.name }}</ion-label>
+        <ion-note slot="end" *ngIf="program.enabled">
+          <ion-icon size="large" name="checkmark-circle" color="success"></ion-icon> Enabled
+        </ion-note>
+        <ion-note slot="end" *ngIf="!program.enabled">
+          <ion-icon size="large" name="remove-circle" color="warning"></ion-icon> Disabled
+        </ion-note>
+      </ion-item>
+      <ion-item *ngIf="!programs.length"><ion-label>No results</ion-label></ion-item>
+    </div>
+
+  </ion-content>
+</ng-container>

@@ -1,0 +1,156 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="'/programs'" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Create Program</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="solid" expand="block" color="primary" [disabled]="!form.dirty" (click)="create()">
+        <ion-icon name="save-outline"></ion-icon> &nbsp; Create
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="content-wrapper">
+
+    <form [formGroup]="form">
+
+      <ion-item>
+        <ion-label position="stacked">Name</ion-label>
+        <ion-input formControlName="name"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Description</ion-label>
+        <ion-textarea formControlName="description" autoGrow></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Location</ion-label>
+        <ion-input formControlName="location"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Eligibility</ion-label>
+        <ion-input formControlName="eligibility"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Fee</ion-label>
+        <ion-input formControlName="fee"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Frequency</ion-label>
+        <ion-input formControlName="frequency"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">How To Apply</ion-label>
+        <ion-input formControlName="how_to_apply"></ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="stacked">Languages</ion-label>
+        <div class="languages-selection">
+          <ion-button (click)="toggleLanguage(language)" fill="outline" [class.selected]="language.selected"
+            *ngFor="let language of languages">{{ language.name }}</ion-button>
+        </div>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="stacked">Focuses</ion-label>
+        <div class="languages-selection">
+          <ion-button (click)="toggleFocus(focus)" fill="outline" [class.selected]="focus.selected"
+            *ngFor="let focus of focuses">{{ focus.name }}</ion-button>
+        </div>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="stacked">Population Groups</ion-label>
+        <div class="languages-selection">
+          <ion-button (click)="togglePopulationGroup(populationGroup)" fill="outline"
+            [class.selected]="populationGroup.selected" *ngFor="let populationGroup of populationGroups">{{
+            populationGroup.name }}</ion-button>
+        </div>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="stacked">Neighbourhoods</ion-label>
+        <div class="languages-selection">
+          <ion-button (click)="toggleNeighbourhood(neighbourhood)" fill="outline"
+            [class.selected]="neighbourhood.selected" *ngFor="let neighbourhood of neighbourhoods">{{
+              neighbourhood.name }}</ion-button>
+        </div>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Staff Name</ion-label>
+        <ion-input formControlName="staff_name"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Staff Contact</ion-label>
+        <ion-input formControlName="staff_contact"></ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label>Enabled</ion-label>
+        <ion-toggle slot="end" formControlName="enabled"></ion-toggle>
+      </ion-item>
+
+    </form>
+
+    <!-- <form class="video-links" [formGroup]="addVideoLinkForm">
+      <h2>Video Links</h2>
+      <div class="link-item" *ngFor="let link of program.video_links; index as i">
+        <p>{{link.name}}<br>
+          <a [href]="link.link" target="_blank">{{link.link}}</a>
+        </p>
+        <ion-button class="icon-only" fill="clear" slot="end" size="large" (click)="removeVideoLink(link, program, i)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </div>
+      <div lines="full" class="add-video-link link-item">
+        <p class="ion-text-wrap">
+          <input placeholder="new video title" type="text" formControlName="name"><br>
+          <input placeholder="new video link" type="text" formControlName="link">
+        </p>
+        <ion-button class="icon-only" fill="clear" slot="end" size="large" (click)="addVideoLink(program)">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-button>
+      </div>
+    </form>
+
+    <form class="images" [formGroup]="addImageForm">
+      <h2>Images</h2>
+      <ion-card *ngFor="let image of program.images; index as i;">
+        <a [href]="image.image" target="_blank"><img [src]="image.image" /></a>
+        <ion-card-header>
+          <ion-card-title [title]="image.name">{{ image.name }}
+            <ion-button fill="clear" size="small" class="icon-only" (click)="removeImage(image, program, i)">
+              <ion-icon name="trash-outline"></ion-icon>
+            </ion-button>
+          </ion-card-title>
+        </ion-card-header>
+      </ion-card>
+      <ion-card>
+        <div class="add-image-wrapper" (click)="newImage.click()">
+          <img [src]="newImageUrl" title="add a new image">
+          <input type="file" #newImage hidden (change)="newImageOnChange($event)" accept="image/*">
+        </div>
+        <ion-card-header>
+          <ion-card-title>
+            <input placeholder="new image title" formControlName="name">
+            <ion-button fill="clear" size="small" class="icon-only" (click)="addNewImage(program)">
+              <ion-icon name="save-outline"></ion-icon>
+            </ion-button>
+          </ion-card-title>
+        </ion-card-header>
+      </ion-card>
+    </form> -->
+
+  </div>
+</ion-content>

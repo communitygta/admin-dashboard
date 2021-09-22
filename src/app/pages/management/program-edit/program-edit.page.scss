@@ -1,0 +1,143 @@
+:host {
+    ion-content {
+        .content-wrapper {
+            margin: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 3px 10px rgb(0 0 0 / 20%);
+            overflow: hidden;
+            padding: 10px 0;
+            position: relative;
+
+            .status {
+                position: absolute;
+                top: 5px;
+                right: 20px;
+                font-weight: bold;
+                font-size: 15px;
+                color: #444444;
+                display: flex;
+                align-items: center;
+                z-index: 99;
+            }
+
+            form {
+                position: relative;
+
+                img {
+                    margin: 20px;
+                }
+
+                ion-item {
+                    ion-select {
+                        width: 220px;
+                    }
+
+                    .languages-selection {
+                        margin: 12px 0 10px;
+
+                        ion-button {
+                            --border-style: dashed;
+                            --border-width: 1px;
+
+                            &.selected {
+                                --border-style: solid;
+                                --border-width: 1px;
+                                --background: var(--ion-color-primary);
+                                --color: #ffffff;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .video-links {
+                margin: 20px;
+                border: 1px solid #dddddd;
+                padding: 16px;
+                border-radius: 10px;
+
+                h2 {
+                    margin: 0;
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: #444444;
+                }
+
+                .link-item {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    border-bottom: 1px solid #dddddd;
+                    padding-left: 16px;
+                    font-size: 14px;
+                }
+
+                ion-label {
+                    font-size: 14px;
+                }
+
+                .add-video-link input {
+                    font-size: 14px;
+                    margin: 5px 0;
+                    outline: none;
+                    box-shadow: none;
+                    border: 1px solid #999999;
+                    border-radius: 4px;
+                    width: 300px;
+                    padding-left: 6px;
+                }
+            }
+
+            .images {
+                display: flex;
+                flex-wrap: wrap;
+                margin: 20px;
+                border: 1px solid #dddddd;
+                padding: 16px;
+                border-radius: 10px;
+
+                h2 {
+                    margin: 0;
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: #444444;
+                    width: 100%;
+                }
+
+                ion-card {
+                    width: 250px;
+                    margin: 20px 10px;
+
+                    a, .add-image-wrapper {
+                        display: flex;
+                        height: 150px;
+                        align-items: center;
+                        justify-content: center;
+                        background: #eeeeee;
+                        cursor: pointer;
+                    }
+
+                    ion-card-title {
+                        font-size: 14px;
+                        color: #444444;
+                        display: flex;
+                        justify-content: space-between;
+                        min-height: 35px;
+                        line-height: 30px;
+                        align-items: stretch;
+                    }
+
+                    input {
+                        font-size: 14px;
+                        outline: none;
+                        box-shadow: none;
+                        border: 1px solid #999999;
+                        border-radius: 4px;
+                        padding-left: 6px;
+                        max-width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}

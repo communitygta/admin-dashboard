@@ -1,3 +1,14 @@
+ion-label {
+  &.user-role {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #757575;
+    padding-left: 10px;
+    margin-bottom: 15px;
+  }
+}
+
 ion-menu ion-content {
   --background: var(--ion-item-background, var(--ion-background-color, #fff));
 }
@@ -29,7 +40,7 @@ ion-menu.md ion-list#inbox-list {
 ion-menu.md ion-list#inbox-list ion-list-header {
   font-size: 22px;
   font-weight: 600;
-
+  margin-bottom: 15px;
   min-height: 20px;
 }
 
@@ -63,6 +74,7 @@ ion-menu.md ion-item ion-icon {
 
 ion-menu.md ion-item ion-label {
   font-weight: 500;
+  color: #444444;
 }
 
 ion-menu.ios ion-content {

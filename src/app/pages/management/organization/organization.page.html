@@ -1,0 +1,156 @@
+<ng-container *ngIf="organization$ | async as organization">
+  <ion-header>
+    <ion-toolbar color="light">
+      <ion-buttons slot="start" *ngIf="authService.userRole === 1">
+        <ion-back-button defaultHref="organizations" text=""></ion-back-button>
+      </ion-buttons>
+      <ion-title>Organization: {{ organization.name }}</ion-title>
+      <ion-buttons slot="end">
+        <ion-button fill="solid" expand="block" color="primary" [routerLink]="['/organization-edit', organization.id]">
+          <ion-icon name="create-outline"></ion-icon> &nbsp; Edit
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+
+    <div class="content-wrapper">
+
+      <img [src]="organization.logo" *ngIf="organization.logo" style="margin: 20px;" width="200">
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Name
+        </div>
+        <ion-label>{{ organization.name || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Mission
+        </div>
+        <ion-label>{{ organization.mission || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Email
+        </div>
+        <ion-label>{{ organization.email || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Phone
+        </div>
+        <ion-label>{{ organization.phone || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Website
+        </div>
+        <ion-label>
+          <a *ngIf="organization.website" [href]="organization.website" target="_blank">{{ organization.website }}</a>
+          <ng-container *ngIf="!organization.website">N/A</ng-container>
+        </ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Address
+        </div>
+        <ion-label>{{ organization.address || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Postal Code
+        </div>
+        <ion-label>{{ organization.postal_code || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Languages
+        </div>
+        <ion-label>
+          <ion-text *ngFor="let language of organization.languages">{{ language.name }}</ion-text>
+          <ng-container *ngIf="organization.languages.length === 0">N/A</ng-container>
+        </ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Charity Number
+        </div>
+        <ion-label>{{ organization.charity_number || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Profile Code
+        </div>
+        <ion-label>{{ organization.profile_code || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Full Time Staff
+        </div>
+        <ion-label>{{ organization.full_time_staff || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Part Time Staff
+        </div>
+        <ion-label>{{ organization.part_time_staff || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Founded
+        </div>
+        <ion-label>{{ organization.founded || 'N/A' }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          View Count
+        </div>
+        <ion-label>{{ organization.view_count }}</ion-label>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Videos
+        </div>
+        <div class="videos">
+          <div class="video" *ngFor="let video_link of organization.video_links">
+            {{ video_link.name }} <a [href]="video_link.link" target="_blank">{{video_link.link}}</a>
+          </div>
+          <ion-label *ngIf="organization.video_links.length === 0">No videos</ion-label>
+        </div>
+      </div>
+
+      <div class="form-item width-50">
+        <div class="item-label">
+          Images
+        </div>
+        <div class="images">
+          <ion-card *ngFor="let image of organization.images">
+            <a [href]="image.image" target="_blank"><img [src]="image.image" /></a>
+            <ion-card-header>
+              <ion-card-title>{{ image.name }}</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+          <ion-label *ngIf="organization.images.length === 0">No images</ion-label>
+        </div>
+      </div>
+
+    </div>
+
+  </ion-content>
+</ng-container>
