@@ -89,10 +89,10 @@
           <ion-input formControlName="founded"></ion-input>
         </ion-item>
 
-        <ion-item [formGroup]="form.controls.neighbourhood">
+        <!-- <ion-item [formGroup]="form.controls.neighbourhood">
           <ion-label position="stacked">Neighbourhood</ion-label>
-          <ion-input readonly formControlName="name"></ion-input>
-        </ion-item>
+          <ion-input readonly [value]="form.controls.neighbourhood.controls.name.value"></ion-input>
+        </ion-item> -->
 
         <ion-item>
           <ion-label position="stacked">View Count</ion-label>
