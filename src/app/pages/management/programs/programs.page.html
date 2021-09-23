@@ -19,7 +19,7 @@
         </ion-item>
       </div>
 
-      <div class="content-wrapper selection">
+      <div class="content-wrapper selection" *ngIf='availableOrganizations'>
         <ion-item style="--padding-start: 0;">
           <ion-label style="display: none;">Select an organization</ion-label>
           <ion-select placeholder="filter by organization" (ionChange)="onSelect($event)" [(ngModel)]="selectedOrganization">

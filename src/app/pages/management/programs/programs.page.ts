@@ -29,7 +29,7 @@ export class ProgramsPage implements OnInit {
 
   getOrganizationSelections(neighbourhoodId) {
     this.availableOrganizations = this.appService.appData.Organization.filter(
-      (item) => item.neighbourhood?.id === neighbourhoodId
+      (item) => item.neighbourhood?.id === +neighbourhoodId
     );
   }
 

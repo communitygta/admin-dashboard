@@ -57,12 +57,12 @@ export class AppComponent implements OnInit {
         this.menu.push({
           title: 'Organizations',
           url: '/organizations',
-          icon: 'paper-plane',
+          icon: 'cube',
         });
         this.menu.push({
           title: 'Programs',
           url: '/programs',
-          icon: 'paper-plane',
+          icon: 'diamond',
         });
         this.submenu.push({
           title: 'Organization Admins',
@@ -82,12 +82,12 @@ export class AppComponent implements OnInit {
           url:
             '/organizations/' +
             this.authService.userProfile$.getValue().profile.organization.id,
-          icon: 'paper-plane',
+          icon: 'cube',
         });
         this.menu.push({
           title: 'Programs',
           url: '/programs',
-          icon: 'paper-plane',
+          icon: 'diamond',
         });
         this.submenu.push({
           title: 'User Profile',

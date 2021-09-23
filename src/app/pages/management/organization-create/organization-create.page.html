@@ -16,11 +16,6 @@
 
   <div class="content-wrapper">
     <form [formGroup]="form">
-      <!-- <div class="logo-wrapper">
-        <img [src]="logo.value" *ngIf="logo.value" width="200" (click)="logoInput.click()">
-        <input type="file" #logoInput (change)="onChange($event)" hidden accept="image/jpg, image/jpeg, image/png">
-        <div class="edit-overlay"><ion-icon size="large" color="primary" name="create"></ion-icon></div>
-      </div> -->
 
       <ion-item>
         <ion-label position="stacked">Name</ion-label>
@@ -76,17 +71,17 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">Full-time Staff</ion-label>
+        <ion-label position="stacked">Number of Full-time Staff</ion-label>
         <ion-input formControlName="full_time_staff"></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">Part-time Staff</ion-label>
+        <ion-label position="stacked">Number of Part-time Staff</ion-label>
         <ion-input formControlName="part_time_staff"></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">Founded</ion-label>
+        <ion-label position="stacked">Founded in Year (eg: 2000)</ion-label>
         <ion-input formControlName="founded"></ion-input>
       </ion-item>
 

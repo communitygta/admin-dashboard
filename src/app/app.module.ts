@@ -41,7 +41,9 @@ const APP_INTERCEPTORS = [
   entryComponents: [],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(),
+    IonicModule.forRoot({
+      mode: 'md'
+    }),
     HttpClientModule,
     AppRoutingModule,
   ],
