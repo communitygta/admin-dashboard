@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertOptions } from '@ionic/core';
 import { Observable } from 'rxjs';
 import { pluck } from 'rxjs/operators';
 import { AppService } from 'src/app/core/services/app.service';
@@ -29,7 +30,7 @@ export class ProgramsPage implements OnInit {
 
   getOrganizationSelections(neighbourhoodId) {
     this.availableOrganizations = this.appService.appData.Organization.filter(
-      (item) => item.neighbourhood?.id === +neighbourhoodId
+      (item) => item.neighbourhood === +neighbourhoodId
     );
   }
 

@@ -43,6 +43,9 @@
           <ion-note slot="end" *ngIf="!program.enabled">
             <ion-icon size="large" name="remove-circle" color="warning"></ion-icon> Disabled
           </ion-note>
+          <ion-note slot="end">
+            <ion-icon size="large" name="eye" color="primary"></ion-icon> {{ program.view_count }} Views
+          </ion-note>
         </ion-item>
         <ion-item *ngIf="!programs.length">
           <ion-label>No results</ion-label>
