@@ -1,6 +1,6 @@
 <ion-app>
-  <ion-split-pane contentId="main-content" mode="md" [when]="isAuth">
-    <ion-menu contentId="main-content" type="overlay">
+  <ion-split-pane contentId="main-content" mode="md">
+    <ion-menu contentId="main-content" type="overlay" [hidden]="!isAuth">
       <ion-content>
         <ion-list id="inbox-list" *ngIf="userProfile$ | async as userProfile">
           <ion-list-header>Community GTA</ion-list-header>

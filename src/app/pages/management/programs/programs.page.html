@@ -2,7 +2,8 @@
 
   <ion-header>
     <ion-toolbar color="light">
-      <ion-title>{{ programs?.length }} Program<ng-container *ngIf="programs?.length > 1">s</ng-container></ion-title>
+      <ion-title>{{ programs?.length }} Program<ng-container *ngIf="programs?.length > 1">s</ng-container>
+      </ion-title>
       <ion-buttons slot="end">
         <ion-button fill="solid" expand="block" color="primary" [routerLink]="['/program-create']">
           <ion-icon name="add-outline"></ion-icon> &nbsp; Create
@@ -15,14 +16,16 @@
     <div class="wrapper">
       <div class="content-wrapper filter">
         <ion-item>
-          <ion-input clearInput (ionChange)="onFilter($event)" placeholder="filter by program name" [(ngModel)]="filterInput"></ion-input>
+          <ion-input clearInput (ionChange)="onFilter($event)" placeholder="filter by program name"
+            [(ngModel)]="filterInput"></ion-input>
         </ion-item>
       </div>
 
       <div class="content-wrapper selection" *ngIf='availableOrganizations'>
         <ion-item style="--padding-start: 0;">
           <ion-label style="display: none;">Select an organization</ion-label>
-          <ion-select placeholder="filter by organization" (ionChange)="onSelect($event)" [(ngModel)]="selectedOrganization">
+          <ion-select placeholder="filter by organization" (ionChange)="onSelect($event)"
+            [(ngModel)]="selectedOrganization">
             <ion-select-option value="0">None</ion-select-option>
             <ion-select-option *ngFor="let availableOrganization of availableOrganizations;"
               [value]="availableOrganization.id">{{ availableOrganization.name }}</ion-select-option>
@@ -37,15 +40,17 @@
               <ion-note class="organization-name">{{ program.organization.name }}</ion-note>
             </ng-container>
           </ion-label>
-          <ion-note slot="end" *ngIf="program.enabled">
-            <ion-icon size="large" name="checkmark-circle" color="success"></ion-icon> Enabled
-          </ion-note>
-          <ion-note slot="end" *ngIf="!program.enabled">
-            <ion-icon size="large" name="remove-circle" color="warning"></ion-icon> Disabled
-          </ion-note>
-          <ion-note slot="end">
-            <ion-icon size="large" name="eye" color="primary"></ion-icon> {{ program.view_count }} Views
-          </ion-note>
+          <ion-label class="ion-text-wrap ion-text-right" slot="end">
+            <ion-note slot="end" *ngIf="program.enabled">
+              <ion-icon size="large" name="checkmark-circle" color="success"></ion-icon> Enabled
+            </ion-note>
+            <ion-note slot="end" *ngIf="!program.enabled">
+              <ion-icon size="large" name="remove-circle" color="warning"></ion-icon> Disabled
+            </ion-note>
+            <ion-note slot="end">
+              <ion-icon size="large" name="eye" color="primary"></ion-icon> {{ program.view_count }} Views
+            </ion-note>
+          </ion-label>
         </ion-item>
         <ion-item *ngIf="!programs.length">
           <ion-label>No results</ion-label>

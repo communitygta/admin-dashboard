@@ -30,14 +30,14 @@
     </div>
 
     <form [formGroup]="form" class="content-wrapper update-password" (ngSubmit)="updatePassword()">
-      <ion-item lines="none">
+      <ion-item lines="full">
         <ion-label>Old Password <ion-icon name="checkmark-circle" color="success" *ngIf="old_password.dirty && old_password.valid">
         </ion-icon>
         <ion-icon name="alert-circle" color="warning" *ngIf="old_password.dirty && old_password.invalid"></ion-icon></ion-label>
         <ion-input formControlName="old_password" type="password" required #oldPassword readonly autocorrect="off" spellcheck="false" autocomplete="off"
           (ionFocus)="oldPassword.readonly = false"></ion-input>
       </ion-item>
-      <ion-item lines="none">
+      <ion-item lines="full">
         <ion-label>New Password <ion-icon name="checkmark-circle" color="success" *ngIf="new_password.dirty && new_password.valid">
         </ion-icon>
         <ion-icon name="alert-circle" color="warning" *ngIf="new_password.dirty && new_password.invalid"></ion-icon></ion-label>

@@ -1,4 +1,10 @@
 :host {
+    ion-header {
+        @media screen and (min-width: 1024px) {
+            display: none;
+        }
+    }
+
     ion-content {
         img {
             display: block;

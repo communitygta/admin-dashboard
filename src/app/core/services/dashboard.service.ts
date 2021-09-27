@@ -160,12 +160,11 @@ export class DashboardService {
   }
 
   getProgramsByNeighbourhood(neighbourhoodId: any): Observable<any> {
-    return this.http.get(
-      API.PREFIX +
-        API.GET_PROGRAMS_LIST +
-        '?neighbourhood=' +
-        neighbourhoodId.pipe(pluck('results'))
-    );
+    return this.http
+      .get(
+        API.PREFIX + API.GET_PROGRAMS_LIST + '?neighbourhood=' + neighbourhoodId
+      )
+      .pipe(pluck('results'));
   }
 
   getAllPrograms(): Observable<any> {

@@ -12,6 +12,8 @@
                 overflow: hidden;
                 padding: 10px 0;
                 position: relative;
+                width: 100%;
+                max-width: 380px;
 
                 &.password-rules {
                     padding-left: 16px;
@@ -44,10 +46,6 @@
                     ion-input {
                         text-align: right;
                     }
-                }
-
-                &.update-password {
-                    width: 300px;
                 }
             }
         }
