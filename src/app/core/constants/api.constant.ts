@@ -3,6 +3,7 @@ export const API = {
     PREFIX: '/api/',
     APP_INFO: 'v1/general-app-info',
     LOGIN: 'login/',
+    LOGOUT: 'logout/',
     USER_PROFILE: 'profile/',
     UPDATE_PASSWORD: 'update-password/',
     GET_ALL_USERS: 'get-all-users/',

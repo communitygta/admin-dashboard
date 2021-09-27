@@ -33,13 +33,20 @@ export class AuthService {
     );
   }
 
-  updatePassword(payload: { old_password: string; new_password: string }): Observable<any> {
+  updatePassword(payload: {
+    old_password: string;
+    new_password: string;
+  }): Observable<any> {
     return this.http.put(API.PREFIX + API.UPDATE_PASSWORD, payload);
   }
 
-  logout() {
-    localStorage.clear();
-    this.isAuth$.next(false);
+  logout(): Observable<any> {
+    return this.http.post(API.PREFIX + API.LOGOUT, null).pipe(
+      map(() => {
+        localStorage.clear();
+        this.isAuth$.next(false);
+      })
+    );
   }
 
   getAllUsersBySuperUser(): Observable<any> {
@@ -55,19 +62,29 @@ export class AuthService {
   }
 
   getUserByNeighbourhood(userId): Observable<any> {
-    return this.http.get(API.PREFIX + API.GET_USERS_BY_NEIGHBOURHOOD + `${userId}/`);
+    return this.http.get(
+      API.PREFIX + API.GET_USERS_BY_NEIGHBOURHOOD + `${userId}/`
+    );
   }
 
   updateUserProfileBySuperUser(profileId, payload): Observable<any> {
-    return this.http.put(API.PREFIX + API.UPDATE_PROFILE_BY_SUPER_USER + `${profileId}/`, payload);
+    return this.http.put(
+      API.PREFIX + API.UPDATE_PROFILE_BY_SUPER_USER + `${profileId}/`,
+      payload
+    );
   }
 
   deleteUserProfileBySuperUser(profileId): Observable<any> {
-    return this.http.delete(API.PREFIX + API.DELETE_USER_BY_SUPER_USER + `${profileId}/`);
+    return this.http.delete(
+      API.PREFIX + API.DELETE_USER_BY_SUPER_USER + `${profileId}/`
+    );
   }
 
   updateUserProfileByNeighbourhoodAdmin(profileId, payload): Observable<any> {
-    return this.http.put(API.PREFIX + API.UPDATE_PROFILE_BY_NEIGHBOURHOOD_ADMIN + `${profileId}/`, payload);
+    return this.http.put(
+      API.PREFIX + API.UPDATE_PROFILE_BY_NEIGHBOURHOOD_ADMIN + `${profileId}/`,
+      payload
+    );
   }
 
   createUserByAdmin(userInfo): Observable<any> {
