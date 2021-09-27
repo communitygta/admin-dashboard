@@ -33,7 +33,7 @@
       <div class="content-wrapper">
         <ion-item *ngFor="let program of programs" button lines="full" [routerLink]="['/programs', program.id]">
           <ion-label class="ion-text-wrap">{{ program.name }}
-            <ng-container *ngIf="userRole === 1">
+            <ng-container *ngIf="(userRole === 0 || userRole === 1) && program.organization">
               <ion-note class="organization-name">{{ program.organization.name }}</ion-note>
             </ng-container>
           </ion-label>

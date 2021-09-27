@@ -42,8 +42,36 @@ export class AuthService {
     this.isAuth$.next(false);
   }
 
+  getAllUsersBySuperUser(): Observable<any> {
+    return this.http.get(API.PREFIX + API.GET_ALL_USERS);
+  }
+
+  getUserBySuperUser(userId): Observable<any> {
+    return this.http.get(API.PREFIX + API.GET_ALL_USERS + `${userId}/`);
+  }
+
   getUsersByNeighbourhood(): Observable<any> {
     return this.http.get(API.PREFIX + API.GET_USERS_BY_NEIGHBOURHOOD);
+  }
+
+  getUserByNeighbourhood(userId): Observable<any> {
+    return this.http.get(API.PREFIX + API.GET_USERS_BY_NEIGHBOURHOOD + `${userId}/`);
+  }
+
+  updateUserProfileBySuperUser(profileId, payload): Observable<any> {
+    return this.http.put(API.PREFIX + API.UPDATE_PROFILE_BY_SUPER_USER + `${profileId}/`, payload);
+  }
+
+  deleteUserProfileBySuperUser(profileId): Observable<any> {
+    return this.http.delete(API.PREFIX + API.DELETE_USER_BY_SUPER_USER + `${profileId}/`);
+  }
+
+  updateUserProfileByNeighbourhoodAdmin(profileId, payload): Observable<any> {
+    return this.http.put(API.PREFIX + API.UPDATE_PROFILE_BY_NEIGHBOURHOOD_ADMIN + `${profileId}/`, payload);
+  }
+
+  createUserByAdmin(userInfo): Observable<any> {
+    return this.http.post(API.PREFIX + API.CREATE_USER_BY_ADMIN, userInfo);
   }
 
   getUserProfile(): Observable<any> {

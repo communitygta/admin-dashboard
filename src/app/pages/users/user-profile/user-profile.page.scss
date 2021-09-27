@@ -12,7 +12,23 @@
                 overflow: hidden;
                 padding: 10px 0;
                 position: relative;
-                max-width: 350px;
+
+                &.password-rules {
+                    padding-left: 16px;
+                    padding-right: 16px;
+
+                    p {
+                        font-size: 13px;
+                        font-weight: bold;
+                        color: #444444;
+                    }
+
+                    ul {
+                        font-size: 13px;
+                        padding-left: 20px;
+                        color: #707070;
+                    }
+                }
 
                 ion-item {
                     ion-label {
@@ -23,6 +39,10 @@
                     ion-note {
                         font-size: 13px;
                         color: #707070;
+                    }
+
+                    ion-input {
+                        text-align: right;
                     }
                 }
 

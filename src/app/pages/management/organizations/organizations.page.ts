@@ -24,18 +24,24 @@ export class OrganizationsPage implements OnInit {
   onFilter(event) {
     const inputValue = event.target.value;
     this.organizations = this.oriOrganizations.filter(
-      (program) =>
-        program.name.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
+      (organization) =>
+        organization.name.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
     );
   }
 
   ionViewWillEnter() {
+    if (this.authService.userRole === UserRole.superAdmin) {
+      this.dashboardService.getAllOrganizations().subscribe((res) => {
+        this.organizations = res;
+        this.oriOrganizations = res;
+      });
+    }
+
     if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
       this.dashboardService
         .getOrganizationsByNeighbourhoodId(
           this.authService.userProfile$.getValue().profile.neighbourhood.id
         )
-        .pipe(pluck('results'))
         .subscribe((res) => {
           this.organizations = res;
           this.oriOrganizations = res;

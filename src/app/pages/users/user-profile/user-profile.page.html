@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>User Profile</ion-title>
+    <ion-title>My Profile</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -18,39 +18,45 @@
         <ion-note slot="end">{{ userProfile.role }}</ion-note>
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item lines="none" *ngIf="userProfile.managing">
         <ion-label>Managing</ion-label>
         <ion-note slot="end">{{ userProfile.managing.name }}</ion-note>
       </ion-item>
 
-      <!-- <ion-item lines="none">
+      <ion-item lines="none">
         <ion-label>Email</ion-label>
         <ion-note slot="end">{{ userProfile.email || 'N/A' }}</ion-note>
       </ion-item>
-
-      <ion-item lines="none">
-        <ion-label>First Name</ion-label>
-        <ion-note slot="end">{{ userProfile.firstname || 'N/A' }}</ion-note>
-      </ion-item>
-
-      <ion-item lines="none">
-        <ion-label>Last Name</ion-label>
-        <ion-note slot="end">{{ userProfile.lastname || 'N/A' }}</ion-note>
-      </ion-item> -->
     </div>
 
-    <form class="content-wrapper update-password" (ngSubmit)="updatePassword(oldPassword.value, newPassword.value)">
-      <ion-item>
-        <ion-label position="floating">Old Password</ion-label>
-        <ion-input type="password" required #oldPassword></ion-input>
+    <form [formGroup]="form" class="content-wrapper update-password" (ngSubmit)="updatePassword()">
+      <ion-item lines="none">
+        <ion-label>Old Password <ion-icon name="checkmark-circle" color="success" *ngIf="old_password.dirty && old_password.valid">
+        </ion-icon>
+        <ion-icon name="alert-circle" color="warning" *ngIf="old_password.dirty && old_password.invalid"></ion-icon></ion-label>
+        <ion-input formControlName="old_password" type="password" required #oldPassword readonly autocorrect="off" spellcheck="false" autocomplete="off"
+          (ionFocus)="oldPassword.readonly = false"></ion-input>
       </ion-item>
-      <ion-item>
-        <ion-label position="floating">New Password</ion-label>
-        <ion-input type="password" required #newPassword></ion-input>
+      <ion-item lines="none">
+        <ion-label>New Password <ion-icon name="checkmark-circle" color="success" *ngIf="new_password.dirty && new_password.valid">
+        </ion-icon>
+        <ion-icon name="alert-circle" color="warning" *ngIf="new_password.dirty && new_password.invalid"></ion-icon></ion-label>
+        <ion-input formControlName="new_password" type="password" required #newPassword readonly autocorrect="off" spellcheck="false" autocomplete="off"
+          (ionFocus)="newPassword.readonly = false"></ion-input>
       </ion-item>
-      <ion-button mode="md" style="margin: 20px 20px 10px 0;float: right;"
-        (click)="updatePassword(oldPassword.value, newPassword.value)">Update password</ion-button>
+      <ion-button type="submit" mode="md" size="small" style="margin: 10px 16px 10px 0;float: right;"
+        (click)="updatePassword()">Update password</ion-button>
     </form>
+
+    <div class="content-wrapper password-rules">
+      <p>Password rules:</p>
+      <ul>
+        <li>Password must contain 8 to 16 characters</li>
+        <li>Password must contain at least one number and one letter</li>
+        <li>Password must not contain a special character</li>
+        <li>Password must not be a commonly used password</li>
+      </ul>
+    </div>
   </div>
 
 </ion-content>

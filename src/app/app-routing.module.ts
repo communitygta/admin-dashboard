@@ -83,6 +83,30 @@ const routes: Routes = [
     path: 'user-list',
     loadChildren: () => import('./pages/users/user-list/user-list.module').then( m => m.UserListPageModule)
   },
+  {
+    path: 'user-edit/:id',
+    loadChildren: () => import('./pages/users/user-edit/user-edit.module').then( m => m.UserEditPageModule)
+  },
+  {
+    path: 'user-create',
+    loadChildren: () => import('./pages/users/user-create/user-create.module').then( m => m.UserCreatePageModule)
+  },
+  {
+    path: 'neighbourhoods',
+    loadChildren: () => import('./pages/management/neighbourhoods/neighbourhoods.module').then( m => m.NeighbourhoodsPageModule)
+  },
+  {
+    path: 'languages',
+    loadChildren: () => import('./pages/management/languages/languages.module').then( m => m.LanguagesPageModule)
+  },
+  {
+    path: 'population-groups',
+    loadChildren: () => import('./pages/management/population-groups/population-groups.module').then( m => m.PopulationGroupsPageModule)
+  },
+  {
+    path: 'focuses',
+    loadChildren: () => import('./pages/management/focuses/focuses.module').then( m => m.FocusesPageModule)
+  },
 ];
 
 @NgModule({

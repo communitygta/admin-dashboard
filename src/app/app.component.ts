@@ -45,12 +45,46 @@ export class AppComponent implements OnInit {
 
     switch (this.authService.userRole) {
       case UserRole.superAdmin:
-        // neighbourhoods
-        // organizations
-        // programs
-        // languages
-        // focuses
-        // population_groups
+        this.menu.push({
+          title: 'Neighbourhoods',
+          url: '/neighbourhoods',
+          icon: 'business',
+        });
+        this.menu.push({
+          title: 'Organizations',
+          url: '/organizations',
+          icon: 'cube',
+        });
+        this.menu.push({
+          title: 'Programs',
+          url: '/programs',
+          icon: 'diamond',
+        });
+        this.menu.push({
+          title: 'Languages',
+          url: '/languages',
+          icon: 'globe',
+        });
+        this.menu.push({
+          title: 'Focuses',
+          url: '/focuses',
+          icon: 'bulb',
+        });
+        this.menu.push({
+          title: 'Population Groups',
+          url: '/population-groups',
+          icon: 'accessibility',
+        });
+        this.submenu.push({
+          title: 'All Admins',
+          url: '/user-list',
+          icon: 'people',
+        });
+        this.submenu.push({
+          title: 'My Profile',
+          url: '/user-profile',
+          icon: 'person-circle',
+        });
         break;
 
       case UserRole.neighbourhoodAdmin:
@@ -90,7 +124,7 @@ export class AppComponent implements OnInit {
           icon: 'diamond',
         });
         this.submenu.push({
-          title: 'User Profile',
+          title: 'My Profile',
           url: '/user-profile',
           icon: 'person-circle',
         });

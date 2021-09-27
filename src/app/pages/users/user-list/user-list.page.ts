@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/core/services/auth.service';
+import { Observable } from 'rxjs';
+import { AuthService, UserRole } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-user-list',
@@ -7,14 +8,19 @@ import { AuthService } from 'src/app/core/services/auth.service';
   styleUrls: ['./user-list.page.scss'],
 })
 export class UserListPage implements OnInit {
+  userProfiles$: Observable<any>;
 
-  users$ = this.authService.getUsersByNeighbourhood();
+  constructor(private authService: AuthService) {}
 
-  constructor(
-    private authService: AuthService,
-  ) { }
+  ngOnInit() {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
+    if (this.authService.userRole === UserRole.superAdmin) {
+      this.userProfiles$ = this.authService.getAllUsersBySuperUser();
+    }
+
+    if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
+      this.userProfiles$ = this.authService.getUsersByNeighbourhood();
+    }
   }
-
 }

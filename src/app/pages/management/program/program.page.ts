@@ -33,6 +33,7 @@ export class ProgramPage implements OnInit {
         },
         {
           text: 'Yes, delete',
+          cssClass: 'danger',
           handler: () => {
             this.dashboardService.removeProgram(program).subscribe((res) => {
               this.navController.navigateBack('/programs');

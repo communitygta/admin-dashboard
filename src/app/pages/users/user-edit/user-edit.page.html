@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="'user-list'" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>User Edit</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="wrapper" *ngIf="userProfile$ | async as userProfile">
+    <form class="content-wrapper" [formGroup]="form">
+      <ion-item lines="none">
+        <ion-label>User Name</ion-label>
+        <ion-note slot="end">{{ userProfile.user.username }}</ion-note>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label>User Role</ion-label>
+        <ion-select formControlName="userRole" *ngIf="showUserRoles">
+          <ion-select-option *ngFor="let role of availableUserRoles" [value]="role.value">{{ role.name }}
+          </ion-select-option>
+        </ion-select>
+        <ion-label slot="end" *ngIf="!showUserRoles">{{ availableUserRoles[1].name }}</ion-label>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label>Email</ion-label>
+        <ion-input formControlName="email" style="text-align: right;" placeholder="email"></ion-input>
+      </ion-item>
+
+      <ion-item lines="none" *ngIf="userRole.value === 1">
+        <ion-label>Managing</ion-label>
+        <ion-select formControlName="neighbourhood" placeholder="select a neighbourhood">
+          <ion-select-option *ngFor="let neighbourhood of availableNeighbourhoods" [value]="neighbourhood.id">{{ neighbourhood.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item lines="none" *ngIf="userRole.value === 2">
+        <ion-label>Managing</ion-label>
+        <ion-select formControlName="organization" placeholder="select a organization">
+          <ion-select-option *ngFor="let organization of availableOrganizations" [value]="organization.id">{{ organization.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label>Is Active</ion-label>
+        <ion-toggle formControlName="isActive" color="primary"></ion-toggle>
+      </ion-item>
+
+      <ion-button size="small" [disabled]="!form.dirty" (click)="update(userProfile)"><ion-icon name="save-outline"></ion-icon> Save</ion-button>
+      <ion-button size="small" color="danger" (click)="delete(userProfile)"><ion-icon name="trash-outline"></ion-icon> Delete</ion-button>
+    </form>
+  </div>
+
+</ion-content>

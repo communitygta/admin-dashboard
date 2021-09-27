@@ -7,6 +7,15 @@
             overflow: hidden;
             padding: 10px 0;
             position: relative;
+
+            ion-item {
+                ion-label {
+                    ion-chip {
+                        position: absolute;
+                        top: 4px;
+                    }
+                }
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonInput } from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppService } from 'src/app/core/services/app.service';
 import { AuthService, UserRole } from 'src/app/core/services/auth.service';
 import { InAppMessageService } from 'src/app/core/services/in-app-message.service';
@@ -11,8 +11,6 @@ import { InAppMessageService } from 'src/app/core/services/in-app-message.servic
   styleUrls: ['./user-profile.page.scss'],
 })
 export class UserProfilePage implements OnInit {
-  @ViewChild('oldPassword') oldPasswordInput: IonInput;
-  @ViewChild('newPassword') newPasswordInput: IonInput;
   userProfile: {
     username: string;
     email: string;
@@ -21,15 +19,49 @@ export class UserProfilePage implements OnInit {
     role: string;
     managing: any;
   };
+  form: FormGroup;
 
   constructor(
     private authService: AuthService,
     private appService: AppService,
     private inAppMessageService: InAppMessageService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit() {
     this.formatProfile();
+    this.initForm();
+  }
+
+  get old_password() {
+    return this.form.controls.old_password;
+  }
+
+  get new_password() {
+    return this.form.controls.new_password;
+  }
+
+  initForm() {
+    this.form = this.fb.group({
+      old_password: [
+        null,
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.maxLength(16),
+          Validators.pattern(/^(?=.*[\d])(?=.*[a-zA-Z])[\w]{8,16}$/),
+        ],
+      ],
+      new_password: [
+        null,
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.maxLength(16),
+          Validators.pattern(/^(?=.*[\d])(?=.*[a-zA-Z])[\w]{8,16}$/),
+        ],
+      ],
+    });
   }
 
   formatProfile() {
@@ -61,15 +93,17 @@ export class UserProfilePage implements OnInit {
     }
   }
 
-  updatePassword(oldPassword, newPassword) {
-    const payload = {
-      old_password: oldPassword,
-      new_password: newPassword,
-    };
-    this.authService.updatePassword(payload).subscribe(() => {
-      this.oldPasswordInput.value = null;
-      this.newPasswordInput.value = null;
-      this.inAppMessageService.simpleAlert(null, 'Your password has been updated.');
+  updatePassword() {
+    if (this.form.invalid) {
+      return;
+    }
+
+    this.authService.updatePassword(this.form.value).subscribe(() => {
+      this.form.reset();
+      this.inAppMessageService.simpleAlert(
+        null,
+        'Your password has been updated.'
+      );
     });
   }
 }

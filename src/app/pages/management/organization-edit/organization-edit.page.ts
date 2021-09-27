@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 import { tap } from 'rxjs/operators';
 import { AppService } from 'src/app/core/services/app.service';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -22,7 +23,9 @@ export class OrganizationEditPage implements OnInit {
   addImageForm: FormGroup;
   languages = this.appService.appData.Language;
   defaultNewImageUrl = 'assets/images/add-image.svg';
-  newImageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.defaultNewImageUrl);
+  newImageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+    this.defaultNewImageUrl
+  );
   organization$ = this.dashboardService
     .getOrganizationById(this.activatedRoute.snapshot.params.id)
     .pipe(
@@ -47,6 +50,7 @@ export class OrganizationEditPage implements OnInit {
     private inAppMessageService: InAppMessageService,
     private appService: AppService,
     private sanitizer: DomSanitizer,
+    private alertController: AlertController
   ) {
     this.initForm();
   }
@@ -97,10 +101,30 @@ export class OrganizationEditPage implements OnInit {
     });
   }
 
-  removeVideoLink(videoLink, organization, index) {
-    this.dashboardService.removeOrganiztionVideoLink(videoLink).subscribe(_ => {
-      organization.video_links.splice(index, 1);
+  async removeVideoLink(videoLink, organization, index) {
+    const alert = await this.alertController.create({
+      header: 'Warning',
+      message: 'Are you sure to delete this video?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'Yes, delete',
+          cssClass: 'danger',
+          handler: () => {
+            this.dashboardService
+              .removeOrganiztionVideoLink(videoLink)
+              .subscribe((_) => {
+                organization.video_links.splice(index, 1);
+              });
+          },
+        },
+      ],
     });
+
+    alert.present();
   }
 
   addVideoLink(organization) {
@@ -134,7 +158,9 @@ export class OrganizationEditPage implements OnInit {
   newImageOnChange(event) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.newImageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(file));
+      this.newImageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+        URL.createObjectURL(file)
+      );
       this.addImageForm.get('image').setValue(file);
     }
   }
@@ -158,14 +184,31 @@ export class OrganizationEditPage implements OnInit {
       });
   }
 
-  removeImage(image, organization, index) {
-    this.dashboardService.removeOrganizationImage(image).subscribe(_ => {
-      organization.images.splice(index, 1);
-      this.inAppMessageService.simpleToast(
-        'Removed.',
-        'bottom'
-      );
+  async removeImage(image, organization, index) {
+    const alert = await this.alertController.create({
+      header: 'Warning',
+      message: 'Are you sure to delete this image?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'Yes, delete',
+          cssClass: 'danger',
+          handler: () => {
+            this.dashboardService
+              .removeOrganizationImage(image)
+              .subscribe((_) => {
+                organization.images.splice(index, 1);
+                this.inAppMessageService.simpleToast('Removed.', 'bottom');
+              });
+          },
+        },
+      ],
     });
+
+    alert.present();
   }
 
   updateLogo(id, logo) {

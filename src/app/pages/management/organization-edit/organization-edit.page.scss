@@ -88,6 +88,12 @@
                     border-bottom: 1px solid #dddddd;
                     padding-left: 16px;
                     font-size: 14px;
+                    max-width: 100%;
+                    width: 400px;
+
+                    .add-video-link {
+                        border-bottom: none;
+                    }
                 }
 
                 ion-label {

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 import { tap } from 'rxjs/operators';
 import { AppService } from 'src/app/core/services/app.service';
 import { AuthService, UserRole } from 'src/app/core/services/auth.service';
@@ -62,7 +63,8 @@ export class ProgramEditPage implements OnInit {
     private inAppMessageService: InAppMessageService,
     private appService: AppService,
     private sanitizer: DomSanitizer,
-    private authService: AuthService
+    private authService: AuthService,
+    private alertController: AlertController
   ) {
     this.initForm();
   }
@@ -133,10 +135,30 @@ export class ProgramEditPage implements OnInit {
     });
   }
 
-  removeVideoLink(videoLink, program, index) {
-    this.dashboardService.removeProgramVideoLink(videoLink).subscribe((_) => {
-      program.video_links.splice(index, 1);
+  async removeVideoLink(videoLink, program, index) {
+    const alert = await this.alertController.create({
+      header: 'Warning',
+      message: 'Are you sure to delete this video?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'Yes, delete',
+          cssClass: 'danger',
+          handler: () => {
+            this.dashboardService
+              .removeProgramVideoLink(videoLink)
+              .subscribe((_) => {
+                program.video_links.splice(index, 1);
+              });
+          },
+        },
+      ],
     });
+
+    alert.present();
   }
 
   addVideoLink(program) {
@@ -199,11 +221,29 @@ export class ProgramEditPage implements OnInit {
       });
   }
 
-  removeImage(image, program, index) {
-    this.dashboardService.removeProgramImage(image).subscribe((_) => {
-      program.images.splice(index, 1);
-      this.inAppMessageService.simpleToast('Removed.', 'bottom');
+  async removeImage(image, program, index) {
+    const alert = await this.alertController.create({
+      header: 'Warning',
+      message: 'Are you sure to delete this image?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'Yes, delete',
+          cssClass: 'danger',
+          handler: () => {
+            this.dashboardService.removeProgramImage(image).subscribe((_) => {
+              program.images.splice(index, 1);
+              this.inAppMessageService.simpleToast('Removed.', 'bottom');
+            });
+          },
+        },
+      ],
     });
+
+    alert.present();
   }
 
   save() {
@@ -219,6 +259,7 @@ export class ProgramEditPage implements OnInit {
     payload.languages = selectedLanguages;
     payload.population_groups = selectedPopulationGroups;
     payload.focuses = selectedFocuses;
+    payload.organization = payload.organization.id;
     this.dashboardService.updateProgram(payload).subscribe((res) => {
       this.inAppMessageService.simpleAlert(
         'Message',

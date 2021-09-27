@@ -72,12 +72,18 @@ export class ProgramsPage implements OnInit {
 
   ionViewWillEnter() {
     this.userRole = this.authService.userRole;
+    if (this.authService.userRole === UserRole.superAdmin) {
+      this.dashboardService.getAllPrograms().subscribe((res) => {
+        this.programs = res;
+        this.oriPrograms = res;
+      });
+    }
+
     if (this.authService.userRole === UserRole.organizationAdmin) {
       this.dashboardService
         .getProgramsByOrganization(
           this.authService.userProfile$.getValue().profile.organization.id
         )
-        .pipe(pluck('results'))
         .subscribe((res) => {
           this.programs = res;
           this.oriPrograms = res;
@@ -90,7 +96,6 @@ export class ProgramsPage implements OnInit {
       this.getOrganizationSelections(neighbourhoodId);
       this.dashboardService
         .getProgramsByNeighbourhood(neighbourhoodId)
-        .pipe(pluck('results'))
         .subscribe((res) => {
           this.programs = res;
           this.oriPrograms = res;

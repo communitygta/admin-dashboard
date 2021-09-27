@@ -1,15 +1,34 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>User List</ion-title>
+    <ion-title>Admin List</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="solid" expand="block" color="primary" [routerLink]="['/user-create']">
+        <ion-icon name="add-outline"></ion-icon> &nbsp; Create
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
-  <div class="content-wrapper" *ngIf="users$ | async as users">
-    <ion-item *ngFor="let user of users">
-      <ion-label class="ion-text-wrap"> {{ user.user.username }} <br> <ion-note>{{ user.user.email || 'N/A' }}</ion-note></ion-label>
-      <ion-label slot="end">{{ user.organization.name }}</ion-label>
+  <div class="content-wrapper" *ngIf="userProfiles$ | async as userProfiles">
+    <ion-item *ngFor="let userProfile of userProfiles" [routerLink]="['/user-edit', userProfile.id]"
+      lines="full">
+      <ion-label class="ion-text-wrap"> {{ userProfile.user.username }} <ion-chip color="warning" *ngIf="!userProfile.user.is_active">
+          <ion-label>Inactive</ion-label>
+        </ion-chip> <br>
+        <ion-note>{{ userProfile.user.email || 'N/A' }}</ion-note>
+      </ion-label>
+      <ion-label slot="end" class="ion-text-wrap ion-text-right">
+        <ng-container *ngIf="userProfile.neighbourhood">
+          Neighbourhood Admin
+          <br><ion-badge>{{userProfile.neighbourhood.name}}</ion-badge>
+        </ng-container>
+        <ng-container *ngIf="userProfile.organization">
+          Organization Admin
+          <br><ion-badge>{{userProfile.organization.name}}</ion-badge>
+        </ng-container>
+      </ion-label>
     </ion-item>
   </div>
 

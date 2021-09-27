@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Manage Neighbourhoods</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="wrapper">
+    <div class="content-wrapper" style="padding: 0;width: 350px;">
+      <ion-item lines="none">
+        <ion-input title="input a name for the new neighbourhood" slot="start" placeholder="new neighbourhood name" [(ngModel)]="newNeighbourhoodName"></ion-input>
+        <ion-button title="create a new neighbourhood" class="icon-only" color="primary" slot="end" fill="clear" size="large" (click)="create()"><ion-icon name="add-outline"></ion-icon></ion-button>
+      </ion-item>
+    </div>
+    <div class="content-wrapper">
+      <div class="list">
+        <ion-chip *ngFor="let neighbourhood of neighbourhoods$ | async" color="primary" outline="true">
+          <ion-label>{{ neighbourhood.name }}</ion-label>
+          <ion-icon name="close" (click)="delete(neighbourhood)"></ion-icon>
+        </ion-chip>
+      </div>
+    </div>
+  </div>
+</ion-content>

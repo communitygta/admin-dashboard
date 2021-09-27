@@ -11,16 +11,14 @@ import { Observable, of, throwError } from 'rxjs';
 import { mergeMap, catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { InAppMessageService } from '../services/in-app-message.service';
+import { ERROR_MESSAGE } from '../constants/errors.constant';
 
 /**
  * 默认HTTP拦截器，其注册细节见 `app.module.ts`
  */
 @Injectable()
 export class AppInterceptor implements HttpInterceptor {
-  constructor(
-    private inAppMessageService: InAppMessageService,
-  ) {}
-
+  constructor(private inAppMessageService: InAppMessageService) {}
 
   public intercept(
     req: HttpRequest<any>,
@@ -69,10 +67,16 @@ export class AppInterceptor implements HttpInterceptor {
         break;
       default:
         if (response instanceof HttpErrorResponse) {
-          let msg = 'error.general';
-          if (response.error.result && response.error.result.error) {
-            msg = response.error.result.error;
+          let msg = 'Network error.';
+
+          if (response.error && response.error.error) {
+            msg = ERROR_MESSAGE[response.error.error];
           }
+
+          if (response.error && response.error.username) {
+            msg = response.error.username[0];
+          }
+
           this.inAppMessageService.simpleToast(msg, 'middle');
 
           return throwError(response);
@@ -81,5 +85,4 @@ export class AppInterceptor implements HttpInterceptor {
     }
     return of(response);
   }
-
 }

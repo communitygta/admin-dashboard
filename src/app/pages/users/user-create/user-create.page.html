@@ -1,0 +1,88 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="'/user-list'" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Create User</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="wrapper">
+    <form class="content-wrapper" [formGroup]="form">
+      <ion-item lines="none">
+        <ion-label>User Name <ion-icon name="checkmark-circle" color="success" *ngIf="username.dirty && username.valid">
+          </ion-icon>
+          <ion-icon name="alert-circle" color="warning" *ngIf="username.dirty && username.invalid"></ion-icon>
+        </ion-label>
+        <ion-input readonly formControlName="username" placeholder="user name" autocorrect="off" spellcheck="false"
+          autocomplete="off" #usernameInput (ionFocus)="usernameInput.readonly = false"></ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label>Email <ion-icon name="checkmark-circle" color="success" *ngIf="email.dirty && email.valid">
+          </ion-icon>
+          <ion-icon name="alert-circle" color="warning" *ngIf="email.dirty && email.invalid"></ion-icon>
+        </ion-label>
+        <ion-input formControlName="email" placeholder="email" autocorrect="off" spellcheck="false" autocomplete="off">
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label>Password <ion-icon name="checkmark-circle" color="success" *ngIf="password.dirty && password.valid">
+          </ion-icon>
+          <ion-icon name="alert-circle" color="warning" *ngIf="password.dirty && password.invalid"></ion-icon>
+        </ion-label>
+        <ion-input formControlName="password" type="password" placeholder="password" autocorrect="off"
+          spellcheck="false" autocomplete="off"></ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label>User Role</ion-label>
+        <ion-select formControlName="userRole" *ngIf="showUserRoles" placeholder="select a user role">
+          <ion-select-option *ngFor="let role of availableUserRoles" [value]="role.value">{{ role.name }}
+          </ion-select-option>
+        </ion-select>
+        <ion-label slot="end" *ngIf="!showUserRoles">{{ availableUserRoles[1].name }}</ion-label>
+      </ion-item>
+
+      <ion-item lines="none" *ngIf="showNeighbourhoods">
+        <ion-label>Neighbourhood <ion-icon name="checkmark-circle" color="success"
+            *ngIf="neighbourhood.dirty && neighbourhood.valid">
+          </ion-icon>
+          <ion-icon name="alert-circle" color="warning" *ngIf="neighbourhood.dirty && neighbourhood.invalid"></ion-icon>
+        </ion-label>
+        <ion-select formControlName="neighbourhood" placeholder="select an neighbourhood">
+          <ion-select-option *ngFor="let neighbourhood of availableNeighbourhoods$ | async" [value]="neighbourhood.id">
+            {{ neighbourhood.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item lines="none" *ngIf="showOrganizations">
+        <ion-label>Organization <ion-icon name="checkmark-circle" color="success"
+            *ngIf="organization.dirty && organization.valid">
+          </ion-icon>
+          <ion-icon name="alert-circle" color="warning" *ngIf="organization.dirty && organization.invalid"></ion-icon>
+        </ion-label>
+        <ion-select formControlName="organization" placeholder="select an organization">
+          <ion-select-option *ngFor="let organization of availableOrganizations$ | async" [value]="organization.id">{{
+            organization.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-button size="small" [disabled]="!form.dirty" (click)="create()">
+        <ion-icon name="save-outline"></ion-icon> Create
+      </ion-button>
+    </form>
+
+    <div class="content-wrapper password-rules">
+      <p>Password rules:</p>
+      <ul>
+        <li>Password must contain 8 to 16 characters</li>
+        <li>Password must contain at least one number and one letter</li>
+        <li>Password must not contain a special character</li>
+        <li>Password must not be a commonly used password</li>
+      </ul>
+    </div>
+  </div>
+</ion-content>
