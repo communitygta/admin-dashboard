@@ -2,6 +2,9 @@
 
   <ion-header>
     <ion-toolbar color="light">
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
       <ion-title>{{ programs?.length }} Program<ng-container *ngIf="programs?.length > 1">s</ng-container>
       </ion-title>
       <ion-buttons slot="end">
