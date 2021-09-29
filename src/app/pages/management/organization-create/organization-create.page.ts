@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { Observable } from 'rxjs';
 import { AppService } from 'src/app/core/services/app.service';
 import { AuthService, UserRole } from 'src/app/core/services/auth.service';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
@@ -18,7 +19,8 @@ import { environment } from 'src/environments/environment';
 export class OrganizationCreatePage implements OnInit {
   logoDomain = environment.appUrl;
   form: FormGroup;
-  languages = this.appService.appData.Language;
+  languages: Array<any>;
+  neighbourhoods$: Observable<any>;
   defaultNewImageUrl = 'assets/images/add-image.svg';
   newImageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
     this.defaultNewImageUrl
@@ -37,10 +39,13 @@ export class OrganizationCreatePage implements OnInit {
   ) {}
 
   ngOnInit() {
+    if (this.authService.userRole === UserRole.superAdmin) {
+      this.neighbourhoods$ = this.dashboardService.getAllNeighbourhoods();
+    }
     if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
       this.neighbourhoodId = this.authService.userProfile$.getValue().profile.neighbourhood.id;
     }
-
+    this.dashboardService.getAllLanguages().subscribe(res => this.languages = res);
     this.initForm();
   }
 
@@ -56,8 +61,8 @@ export class OrganizationCreatePage implements OnInit {
       languages: [null],
       logo: [null],
       mission: [null],
-      name: [null],
-      neighbourhood: [this.neighbourhoodId],
+      name: [null, [Validators.required]],
+      neighbourhood: [this.neighbourhoodId, [Validators.required]],
       part_time_staff: [null],
       phone: [null],
       postal_code: [null],
@@ -74,6 +79,11 @@ export class OrganizationCreatePage implements OnInit {
   }
 
   create() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.inAppMessageService.simpleToast('Please fill in all required fields.', 'bottom');
+      return;
+    }
     const payload = Object.assign({}, this.form.value);
     delete payload.logo;
     const selectedLanguages = this.languages.filter(

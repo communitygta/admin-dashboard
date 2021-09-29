@@ -50,7 +50,7 @@
       </ion-item>
 
       <ion-button size="small" [disabled]="!form.dirty" (click)="update(userProfile)"><ion-icon name="save-outline"></ion-icon> Save</ion-button>
-      <ion-button size="small" color="danger" (click)="delete(userProfile)"><ion-icon name="trash-outline"></ion-icon> Delete</ion-button>
+      <ion-button size="small" color="danger" *ngIf="showUserRoles" (click)="delete(userProfile)"><ion-icon name="trash-outline"></ion-icon> Delete</ion-button>
     </form>
   </div>
 

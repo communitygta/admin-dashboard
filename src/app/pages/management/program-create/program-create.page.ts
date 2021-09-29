@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NavController } from '@ionic/angular';
+import { Observable } from 'rxjs';
 import { AppService } from 'src/app/core/services/app.service';
 import { AuthService, UserRole } from 'src/app/core/services/auth.service';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
@@ -19,16 +20,15 @@ export class ProgramCreatePage implements OnInit {
   form: FormGroup;
   addVideoLinkForm: FormGroup;
   addImageForm: FormGroup;
-  languages = this.appService.appData.Language;
-  populationGroups = this.appService.appData.PopulationGroup;
-  focuses = this.appService.appData.Focus;
-  neighbourhoods = this.appService.appData.Neighbourhood;
+  languages: Array<any>;
+  populationGroups: Array<any>;
+  focuses: Array<any>;
   defaultNewImageUrl = 'assets/images/add-image.svg';
   newImageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
     this.defaultNewImageUrl
   );
   organizationId;
-  availableOrganizations: Array<any>;
+  availableOrganizations$: Observable<any>;
 
   constructor(
     private dashboardService: DashboardService,
@@ -37,54 +37,53 @@ export class ProgramCreatePage implements OnInit {
     private appService: AppService,
     private sanitizer: DomSanitizer,
     private authService: AuthService,
-    private navController: NavController,
+    private navController: NavController
   ) {
     this.initForm();
   }
 
   ngOnInit() {
+    const options = {
+      languages: 'true',
+      populationGroups: 'true',
+      focuses: 'true'
+    };
+    this.dashboardService.getOptions(options).subscribe((res) => {
+      this.languages = res.languages;
+      this.focuses = res.focuses;
+      this.populationGroups = res.populationGroups;
+    });
+
     if (this.authService.userRole === UserRole.organizationAdmin) {
       this.organizationId =
         this.authService.userProfile$.getValue().profile.organization.id;
     }
 
     if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
-      this.getOrganizationSelections(this.authService.userProfile$.getValue().profile.neighbourhood.id);
+      this.getOrganizationSelections(
+        this.authService.userProfile$.getValue().profile.neighbourhood.id
+      );
+    }
+
+    if (this.authService.userRole === UserRole.superAdmin) {
+      this.availableOrganizations$ = this.dashboardService.getAllOrganizations();
     }
 
     this.initForm();
     this.initAddVideoLinkForm();
     this.initAddImageForm();
-
-    this.languages.map((language) => {
-      language.selected = false;
-      return language;
-    });
-    this.populationGroups.map((populationGroup) => {
-      populationGroup.selected = false;
-      return populationGroup;
-    });
-    this.focuses.map((focus) => {
-      focus.selected = false;
-      return focus;
-    });
-    this.neighbourhoods.map((neighbourhood) => {
-      neighbourhood.selected = false;
-      return neighbourhood;
-    });
   }
 
   getOrganizationSelections(neighbourhoodId) {
-    this.availableOrganizations = this.appService.appData.Organization.filter(
-      (item) => item.neighbourhood === neighbourhoodId
-    );
+    this.availableOrganizations$ =
+      this.dashboardService.getOrganizationsByNeighbourhoodId(neighbourhoodId);
   }
 
   initForm() {
     this.form = this.fb.group({
       description: [null],
       eligibility: [null],
-      enabled: [null],
+      enabled: [false],
       fee: [null],
       focuses: [null],
       frequency: [null],
@@ -93,9 +92,9 @@ export class ProgramCreatePage implements OnInit {
       images: [null],
       languages: [null],
       location: [null],
-      name: [null],
+      name: [null, [Validators.required]],
       neighbourhoods: [null],
-      organization: [this.organizationId],
+      organization: [this.organizationId, [Validators.required]],
       population_groups: [null],
       staff_contact: [null],
       staff_name: [null],
@@ -199,8 +198,13 @@ export class ProgramCreatePage implements OnInit {
   }
 
   create() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.inAppMessageService.simpleToast('Please fill in all required fields.', 'bottom');
+      return;
+    }
     const payload = Object.assign({}, this.form.value);
-    delete payload.neighbourhoods;
+    payload.neighbourhoods = [];
     const selectedLanguages = this.languages.filter(
       (language) => language.selected
     );
@@ -208,13 +212,9 @@ export class ProgramCreatePage implements OnInit {
       (populationGroup) => populationGroup.selected
     );
     const selectedFocuses = this.focuses.filter((focus) => focus.selected);
-    const selectedNeighbourhoods = this.neighbourhoods
-      .filter((neighbourhood) => neighbourhood.selected)
-      .map((neighbourhood) => neighbourhood.id);
     payload.languages = selectedLanguages;
     payload.population_groups = selectedPopulationGroups;
     payload.focuses = selectedFocuses;
-    payload.neighbourhoods = selectedNeighbourhoods;
 
     this.dashboardService.createProgram(payload).subscribe((res) => {
       this.inAppMessageService.simpleAlert(

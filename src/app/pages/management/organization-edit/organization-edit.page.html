@@ -22,11 +22,15 @@
           <img [src]="logo.value" *ngIf="logo.value" width="200">
           <img [src]="defaultNewImageUrl" *ngIf="!logo.value" width="64">
           <input type="file" #logoInput (change)="onChange($event)" hidden accept="image/jpg, image/jpeg, image/png">
-          <div class="edit-overlay" title="Edit logo" (click)="logoInput.click()"><ion-icon size="large" color="primary" name="create"></ion-icon></div>
+          <div class="edit-overlay" title="Edit logo" (click)="logoInput.click()">
+            <ion-icon size="large" color="primary" name="create"></ion-icon>
+          </div>
         </div>
 
         <ion-item>
-          <ion-label position="stacked">Name</ion-label>
+          <ion-label position="stacked">Name <ion-text *ngIf="form.controls.name.touched && form.controls.name.invalid"
+              color="danger">(required)</ion-text>
+          </ion-label>
           <ion-input formControlName="name"></ion-input>
         </ion-item>
 
@@ -68,6 +72,23 @@
           </div>
         </ion-item>
 
+        <ion-item *ngIf="neighbourhoods">
+          <ion-label position="stacked">Neighbourhood <ion-text
+              *ngIf="form.controls.neighbourhood.touched && form.controls.neighbourhood.invalid" color="danger">
+              (required)</ion-text>
+          </ion-label>
+          <ion-select formControlName="neighbourhood" placeholder="select a neighbourhood">
+            <ion-select-option *ngFor="let neighbourhood of neighbourhoods" [value]="neighbourhood.id">{{
+              neighbourhood.name }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item *ngIf="!neighbourhoods">
+          <ion-label position="stacked">Neighbourhood</ion-label>
+          <ion-input readonly *ngIf="currentNeighbourhood$ | async as neighbourhood" [value]="neighbourhood.name">
+          </ion-input>
+        </ion-item>
+
         <ion-item>
           <ion-label position="stacked">Charity Number</ion-label>
           <ion-input formControlName="charity_number"></ion-input>
@@ -103,7 +124,7 @@
           </p>
           <ion-button class="icon-only" fill="clear" slot="end" size="large"
             (click)="removeVideoLink(link, organization, i)">
-            <ion-icon name="trash-outline" size="small"></ion-icon>
+            <ion-icon name="trash-outline" size="small" color="danger"></ion-icon>
           </ion-button>
         </div>
         <div lines="full" class="add-video-link link-item">
@@ -124,7 +145,7 @@
           <ion-card-header>
             <ion-card-title [title]="image.name">{{ image.name }}
               <ion-button fill="clear" size="small" class="icon-only" (click)="removeImage(image, organization, i)">
-                <ion-icon name="trash-outline"></ion-icon>
+                <ion-icon name="trash-outline" color="danger"></ion-icon>
               </ion-button>
             </ion-card-title>
           </ion-card-header>

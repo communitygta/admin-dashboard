@@ -16,6 +16,8 @@
                     ion-chip {
                         position: absolute;
                         top: 4px;
+                        background-color: var(--ion-color-warning);
+                        --color: #ffffff;
                     }
                 }
             }

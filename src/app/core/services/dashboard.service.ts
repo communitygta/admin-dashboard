@@ -10,14 +10,29 @@ import { API } from '../constants/api.constant';
 export class DashboardService {
   constructor(private http: HttpClient) {}
 
+  getOptions(options: {
+    neighbourhoods?: string;
+    organizations?: string;
+    languages?: string;
+    focuses?: string;
+    populationGroups?: string;
+  }): Observable<any> {
+    const qs = new URLSearchParams(options);
+    return this.http.get(API.PREFIX + API.GET_GENERAL_OPTIONS + qs);
+  }
+
   getAllNeighbourhoods(): Observable<any> {
-    return this.http
-      .get(API.PREFIX + API.NEIGHBOURHOODS)
-      .pipe(pluck('results'));
+    return this.http.get(API.PREFIX + API.NEIGHBOURHOOD_LIST);
   }
 
   createNeighbourhood(neighbourhood: { name: string }): Observable<any> {
-    return this.http.post(API.PREFIX + API.NEIGHBOURHOODS, neighbourhood);
+    return this.http.post(API.PREFIX + API.NEIGHBOURHOOD_LIST, neighbourhood);
+  }
+
+  getNeighbourhood(neighbourhoodId): Observable<any> {
+    return this.http.get(
+      API.PREFIX + API.NEIGHBOURHOOD_DETAIL + neighbourhoodId
+    );
   }
 
   deleteNeighbourhood(neighbourhood: {
@@ -25,47 +40,50 @@ export class DashboardService {
     name: string;
   }): Observable<any> {
     return this.http.delete(
-      API.PREFIX + API.NEIGHBOURHOODS + `${neighbourhood.id}/`
+      API.PREFIX + API.NEIGHBOURHOOD_DETAIL + `${neighbourhood.id}`
     );
   }
   // end of neighbourhoods
 
   // languages
   getAllLanguages(): Observable<any> {
-    return this.http.get(API.PREFIX + API.LANGUAGES).pipe(pluck('results'));
+    return this.http.get(API.PREFIX + API.LANGUAGE_LIST);
   }
 
   createLanguage(language: { name: string }): Observable<any> {
-    return this.http.post(API.PREFIX + API.LANGUAGES, language);
+    return this.http.post(API.PREFIX + API.LANGUAGE_LIST, language);
   }
 
   deleteLanguage(language: { id: string; name: string }): Observable<any> {
-    return this.http.delete(API.PREFIX + API.LANGUAGES + `${language.id}/`);
+    return this.http.delete(
+      API.PREFIX + API.LANGUAGE_DETAIL + `${language.id}`
+    );
   }
   // end of languages
 
   // focuses
   getAllFocuses(): Observable<any> {
-    return this.http.get(API.PREFIX + API.FOCUSES).pipe(pluck('results'));
+    return this.http.get(API.PREFIX + API.FOCUS_LIST);
   }
 
   createFocus(focus: { name: string }): Observable<any> {
-    return this.http.post(API.PREFIX + API.FOCUSES, focus);
+    return this.http.post(API.PREFIX + API.FOCUS_LIST, focus);
   }
 
   deleteFocus(focus: { id: string; name: string }): Observable<any> {
-    return this.http.delete(API.PREFIX + API.FOCUSES + `${focus.id}/`);
+    return this.http.delete(API.PREFIX + API.FOCUS_DETAIL + `${focus.id}`);
   }
   // end of focuses
 
   getAllPopulationGroups(): Observable<any> {
-    return this.http
-      .get(API.PREFIX + API.POPULATION_GROUPS)
-      .pipe(pluck('results'));
+    return this.http.get(API.PREFIX + API.POPULATION_GROUP_LIST);
   }
 
   createPopulationGroup(populationGroup: { name: string }): Observable<any> {
-    return this.http.post(API.PREFIX + API.POPULATION_GROUPS, populationGroup);
+    return this.http.post(
+      API.PREFIX + API.POPULATION_GROUP_LIST,
+      populationGroup
+    );
   }
 
   deletePopulationGroup(populationGroup: {
@@ -73,29 +91,41 @@ export class DashboardService {
     name: string;
   }): Observable<any> {
     return this.http.delete(
-      API.PREFIX + API.POPULATION_GROUPS + `${populationGroup.id}/`
+      API.PREFIX + API.POPULATION_GROUP_DETAIL + `${populationGroup.id}`
     );
   }
   // end of population groups
 
   // organization
-
   getAllOrganizations(): Observable<any> {
-    return this.http
-      .get(API.PREFIX + API.GET_ORGANIZATIONS)
-      .pipe(pluck('results'));
+    return this.http.get(API.PREFIX + API.ORGANIZATION_LIST);
   }
 
   getOrganizationsByNeighbourhoodId(neighbourhoodId): Observable<any> {
-    return this.http
-      .get(
-        API.PREFIX + API.GET_ORGANIZATIONS + '?neighbourhood=' + neighbourhoodId
-      )
-      .pipe(pluck('results'));
+    return this.http.get(
+      API.PREFIX + API.ORGANIZATION_LIST + '?neighbourhood=' + neighbourhoodId
+    );
   }
 
   getOrganizationById(id): Observable<any> {
-    return this.http.get(API.PREFIX + API.GET_ORGANIZATIONS + `${id}/`);
+    return this.http.get(API.PREFIX + API.ORGANIZATION_DETAIL + `${id}`);
+  }
+
+  updateOrganization(organization): Observable<any> {
+    return this.http.put(
+      API.PREFIX + API.ORGANIZATION_DETAIL + `${organization.id}`,
+      organization
+    );
+  }
+
+  createOrganization(organization): Observable<any> {
+    return this.http.post(API.PREFIX + API.ORGANIZATION_LIST, organization);
+  }
+
+  deleteOrganization(organization): Observable<any> {
+    return this.http.delete(
+      API.PREFIX + API.ORGANIZATION_DETAIL + `${organization.id}`
+    );
   }
 
   updateOrganizationLogo(organization): Observable<any> {
@@ -103,23 +133,6 @@ export class DashboardService {
     formData.append('logo', organization.logo);
     formData.append('id', organization.id);
     return this.http.put(API.PREFIX + API.UPDATE_ORGANIZATION_LOGO, formData);
-  }
-
-  updateOrganization(organization): Observable<any> {
-    return this.http.put(
-      API.PREFIX + API.GET_ORGANIZATIONS + `${organization.id}/`,
-      organization
-    );
-  }
-
-  createOrganization(organization): Observable<any> {
-    return this.http.post(API.PREFIX + API.GET_ORGANIZATIONS, organization);
-  }
-
-  deleteOrganization(organization): Observable<any> {
-    return this.http.delete(
-      API.PREFIX + API.GET_ORGANIZATIONS + `${organization.id}/`
-    );
   }
 
   addOrganizationVideoLink(payload): Observable<any> {
@@ -131,7 +144,7 @@ export class DashboardService {
 
   removeOrganiztionVideoLink(payload): Observable<any> {
     return this.http.delete(
-      API.PREFIX + API.REMOVE_ORGANIZATION_VIDEO_LINK + `${payload.id}/`
+      API.PREFIX + API.REMOVE_ORGANIZATION_VIDEO_LINK + `${payload.id}`
     );
   }
 
@@ -145,7 +158,7 @@ export class DashboardService {
 
   removeOrganizationImage(payload): Observable<any> {
     return this.http.delete(
-      API.PREFIX + API.REMOVE_ORGANIZATION_IMAGE + `${payload.id}/`
+      API.PREFIX + API.REMOVE_ORGANIZATION_IMAGE + `${payload.id}`
     );
   }
 
@@ -183,7 +196,7 @@ export class DashboardService {
 
   removeProgramVideoLink(payload): Observable<any> {
     return this.http.delete(
-      API.PREFIX + API.REMOVE_PROGRAM_VIDEO_LINK + `${payload.id}/`
+      API.PREFIX + API.REMOVE_PROGRAM_VIDEO_LINK + `${payload.id}`
     );
   }
 
@@ -197,7 +210,7 @@ export class DashboardService {
 
   removeProgramImage(payload): Observable<any> {
     return this.http.delete(
-      API.PREFIX + API.REMOVE_PROGRAM_IMAGE + `${payload.id}/`
+      API.PREFIX + API.REMOVE_PROGRAM_IMAGE + `${payload.id}`
     );
   }
 

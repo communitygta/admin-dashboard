@@ -16,7 +16,7 @@
 
   <ion-content>
     <div class="content-wrapper">
-      
+
       <form [formGroup]="form">
 
         <div class="status">
@@ -28,7 +28,9 @@
         </div>
 
         <ion-item>
-          <ion-label position="stacked">Name</ion-label>
+          <ion-label position="stacked">Name <ion-text *ngIf="form.controls.name.touched && form.controls.name.invalid"
+              color="danger">(required)</ion-text>
+          </ion-label>
           <ion-input formControlName="name"></ion-input>
         </ion-item>
 
@@ -63,7 +65,10 @@
         </ion-item>
 
         <ion-item lines="full" *ngIf="availableOrganizations">
-          <ion-label position="stacked">Select an organization</ion-label>
+          <ion-label position="stacked">Select an organization <ion-text
+              *ngIf="form.controls.organization.touched && form.controls.organization.invalid" color="danger">(required)
+            </ion-text>
+          </ion-label>
           <ion-select placeholder="Select" formControlName="organization">
             <ion-select-option *ngFor="let availableOrganization of availableOrganizations;"
               [value]="availableOrganization.id">{{ availableOrganization.name }}</ion-select-option>
@@ -120,7 +125,7 @@
           </p>
           <ion-button class="icon-only" fill="clear" slot="end" size="large" color="danger"
             (click)="removeVideoLink(link, program, i)">
-            <ion-icon name="trash-outline" size="small"></ion-icon>
+            <ion-icon name="trash-outline" size="small" color="danger"></ion-icon>
           </ion-button>
         </div>
         <div class="add-video-link link-item">
@@ -141,7 +146,7 @@
           <ion-card-header>
             <ion-card-title [title]="image.name">{{ image.name }}
               <ion-button fill="clear" size="small" class="icon-only" (click)="removeImage(image, program, i)">
-                <ion-icon name="trash-outline"></ion-icon>
+                <ion-icon name="trash-outline" color="danger"></ion-icon>
               </ion-button>
             </ion-card-title>
           </ion-card-header>

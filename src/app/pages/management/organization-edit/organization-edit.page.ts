@@ -4,9 +4,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { tap } from 'rxjs/operators';
+import { forkJoin, Observable } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 import { AppService } from 'src/app/core/services/app.service';
-import { AuthService } from 'src/app/core/services/auth.service';
+import { AuthService, UserRole } from 'src/app/core/services/auth.service';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
 import { InAppMessageService } from 'src/app/core/services/in-app-message.service';
 import { environment } from 'src/environments/environment';
@@ -21,26 +22,14 @@ export class OrganizationEditPage implements OnInit {
   form: FormGroup;
   addVideoLinkForm: FormGroup;
   addImageForm: FormGroup;
-  languages = this.appService.appData.Language;
   defaultNewImageUrl = 'assets/images/add-image.svg';
   newImageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
     this.defaultNewImageUrl
   );
-  organization$ = this.dashboardService
-    .getOrganizationById(this.activatedRoute.snapshot.params.id)
-    .pipe(
-      tap((res) => {
-        this.languages.map((language) => {
-          language.selected = !!res.languages.find(
-            (item) => item.id === language.id
-          );
-          return language;
-        });
-        this.form.patchValue(res);
-        this.initAddVideoLinkForm();
-        this.initAddImageForm();
-      })
-    );
+  neighbourhoods: Array<any>;
+  languages: Array<any>;
+  organization$: Observable<any>;
+  currentNeighbourhood$: Observable<any>;
 
   constructor(
     private authService: AuthService,
@@ -51,14 +40,59 @@ export class OrganizationEditPage implements OnInit {
     private appService: AppService,
     private sanitizer: DomSanitizer,
     private alertController: AlertController
-  ) {
+  ) {}
+
+  ngOnInit() {
     this.initForm();
+
+    if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
+      this.organization$ = this.dashboardService.getAllLanguages().pipe(
+        switchMap((languages) => {
+          this.languages = languages;
+          return this.getOrganization();
+        })
+      );
+    }
+
+    if (this.authService.userRole === UserRole.superAdmin) {
+      this.organization$ = forkJoin([
+        this.dashboardService.getAllNeighbourhoods(),
+        this.dashboardService.getAllLanguages(),
+      ]).pipe(
+        switchMap(([neighbourhoods, languages]) => {
+          this.neighbourhoods = neighbourhoods;
+          this.languages = languages;
+          return this.getOrganization();
+        })
+      );
+    }
   }
 
-  ngOnInit() {}
+  getOrganization(): Observable<any> {
+    return this.dashboardService
+      .getOrganizationById(this.activatedRoute.snapshot.params.id)
+      .pipe(
+        tap((res) => {
+          this.languages.map((language) => {
+            language.selected = !!res.languages.find(
+              (item) => item.id === language.id
+            );
+            return language;
+          });
+          this.form.patchValue(res);
+          this.initAddVideoLinkForm();
+          this.initAddImageForm();
+          this.currentNeighbourhood$ = this.dashboardService.getNeighbourhood(res.neighbourhood);
+        })
+      );
+  }
 
   get logo() {
     return this.form.controls.logo;
+  }
+
+  get logoUrl() {
+    return environment.appUrl + this.logo.value;
   }
 
   initForm() {
@@ -73,8 +107,8 @@ export class OrganizationEditPage implements OnInit {
       languages: [null],
       logo: [null],
       mission: [null],
-      name: [null],
-      neighbourhood: [null],
+      name: [null, [Validators.required]],
+      neighbourhood: [null, [Validators.required]],
       part_time_staff: [null],
       phone: [null],
       postal_code: [null],
@@ -152,6 +186,7 @@ export class OrganizationEditPage implements OnInit {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       this.updateLogo(this.form.get('id').value, file);
+      event.target.value = '';
     }
   }
 
@@ -162,17 +197,32 @@ export class OrganizationEditPage implements OnInit {
         URL.createObjectURL(file)
       );
       this.addImageForm.get('image').setValue(file);
+      event.target.value = '';
     }
   }
 
   addNewImage(organization) {
     if (this.addImageForm.invalid) {
-      return;
+      if (this.addImageForm.controls.image.invalid) {
+        this.inAppMessageService.simpleToast(
+          'Please upload a new image',
+          'bottom'
+        );
+        return;
+      }
+      if (this.addImageForm.controls.name.invalid) {
+        this.inAppMessageService.simpleToast(
+          'Please input a name for the new image',
+          'bottom'
+        );
+        return;
+      }
     }
     this.dashboardService
       .addOrganizationImage(this.addImageForm.value)
       .subscribe((res) => {
-        this.addImageForm.reset();
+        this.addImageForm.controls.image.reset();
+        this.addImageForm.controls.name.reset();
         this.inAppMessageService.simpleToast(
           'A new image has been added.',
           'bottom'
@@ -226,6 +276,11 @@ export class OrganizationEditPage implements OnInit {
   }
 
   save() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.inAppMessageService.simpleToast('Please fill in all required fields.', 'bottom');
+      return;
+    }
     const payload = Object.assign({}, this.form.value);
     delete payload.logo;
     const selectedLanguages = this.languages.filter(

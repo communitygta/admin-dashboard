@@ -18,7 +18,9 @@
     <form [formGroup]="form">
 
       <ion-item>
-        <ion-label position="stacked">Name</ion-label>
+        <ion-label position="stacked">Name <ion-text *ngIf="form.controls.name.touched && form.controls.name.invalid"
+            color="danger">(required)</ion-text>
+        </ion-label>
         <ion-input formControlName="name"></ion-input>
       </ion-item>
 
@@ -53,9 +55,12 @@
       </ion-item>
 
       <ion-item lines="full">
-        <ion-label position="stacked">Select an organization</ion-label>
+        <ion-label position="stacked">Select an organization <ion-text
+            *ngIf="form.controls.organization.touched && form.controls.organization.invalid" color="danger">(required)
+          </ion-text>
+        </ion-label>
         <ion-select placeholder="Select" formControlName="organization">
-          <ion-select-option *ngFor="let availableOrganization of availableOrganizations;"
+          <ion-select-option *ngFor="let availableOrganization of availableOrganizations$ | async;"
             [value]="availableOrganization.id">{{ availableOrganization.name }}</ion-select-option>
         </ion-select>
       </ion-item>
@@ -85,15 +90,6 @@
         </div>
       </ion-item>
 
-      <ion-item lines="full">
-        <ion-label position="stacked">Neighbourhoods</ion-label>
-        <div class="languages-selection">
-          <ion-button (click)="toggleNeighbourhood(neighbourhood)" fill="outline"
-            [class.selected]="neighbourhood.selected" *ngFor="let neighbourhood of neighbourhoods">{{
-            neighbourhood.name }}</ion-button>
-        </div>
-      </ion-item>
-
       <ion-item>
         <ion-label position="stacked">Staff Name</ion-label>
         <ion-input formControlName="staff_name"></ion-input>
@@ -110,55 +106,6 @@
       </ion-item>
 
     </form>
-
-    <!-- <form class="video-links" [formGroup]="addVideoLinkForm">
-      <h2>Video Links</h2>
-      <div class="link-item" *ngFor="let link of program.video_links; index as i">
-        <p>{{link.name}}<br>
-          <a [href]="link.link" target="_blank">{{link.link}}</a>
-        </p>
-        <ion-button class="icon-only" fill="clear" slot="end" size="large" (click)="removeVideoLink(link, program, i)">
-          <ion-icon name="trash-outline"></ion-icon>
-        </ion-button>
-      </div>
-      <div lines="full" class="add-video-link link-item">
-        <p class="ion-text-wrap">
-          <input placeholder="new video title" type="text" formControlName="name"><br>
-          <input placeholder="new video link" type="text" formControlName="link">
-        </p>
-        <ion-button class="icon-only" fill="clear" slot="end" size="large" (click)="addVideoLink(program)">
-          <ion-icon name="add-outline"></ion-icon>
-        </ion-button>
-      </div>
-    </form>
-
-    <form class="images" [formGroup]="addImageForm">
-      <h2>Images</h2>
-      <ion-card *ngFor="let image of program.images; index as i;">
-        <a [href]="image.image" target="_blank"><img [src]="image.image" /></a>
-        <ion-card-header>
-          <ion-card-title [title]="image.name">{{ image.name }}
-            <ion-button fill="clear" size="small" class="icon-only" (click)="removeImage(image, program, i)">
-              <ion-icon name="trash-outline"></ion-icon>
-            </ion-button>
-          </ion-card-title>
-        </ion-card-header>
-      </ion-card>
-      <ion-card>
-        <div class="add-image-wrapper" (click)="newImage.click()">
-          <img [src]="newImageUrl" title="add a new image">
-          <input type="file" #newImage hidden (change)="newImageOnChange($event)" accept="image/*">
-        </div>
-        <ion-card-header>
-          <ion-card-title>
-            <input placeholder="new image title" formControlName="name">
-            <ion-button fill="clear" size="small" class="icon-only" (click)="addNewImage(program)">
-              <ion-icon name="save-outline"></ion-icon>
-            </ion-button>
-          </ion-card-title>
-        </ion-card-header>
-      </ion-card>
-    </form> -->
 
   </div>
 </ion-content>

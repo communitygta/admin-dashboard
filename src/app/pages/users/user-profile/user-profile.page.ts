@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppService } from 'src/app/core/services/app.service';
 import { AuthService, UserRole } from 'src/app/core/services/auth.service';
+import { DashboardService } from 'src/app/core/services/dashboard.service';
 import { InAppMessageService } from 'src/app/core/services/in-app-message.service';
 
 @Component({
@@ -25,7 +26,8 @@ export class UserProfilePage implements OnInit {
     private authService: AuthService,
     private appService: AppService,
     private inAppMessageService: InAppMessageService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dashboardService: DashboardService
   ) {}
 
   ngOnInit() {
@@ -81,15 +83,11 @@ export class UserProfilePage implements OnInit {
     }
     if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
       this.userProfile.role = 'Neighbourhood Administrator';
-      this.userProfile.managing = this.appService.appData.Neighbourhood.find(
-        (item) => item.id === userProfile.profile.neighbourhood.id
-      );
+      this.userProfile.managing = userProfile.profile.neighbourhood;
     }
     if (this.authService.userRole === UserRole.organizationAdmin) {
       this.userProfile.role = 'Organization Administrator';
-      this.userProfile.managing = this.appService.appData.Organization.find(
-        (item) => item.id === userProfile.profile.organization.id
-      );
+      this.userProfile.managing = userProfile.profile.organization;
     }
   }
 

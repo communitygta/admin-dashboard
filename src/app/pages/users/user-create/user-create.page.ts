@@ -81,9 +81,10 @@ export class UserCreatePage implements OnInit {
       }
       return;
     }
-    if (this.userRole.value === 1) {
+    if (this.userRole.value === this.availableUserRoles[0].value) {
       delete this.form.value.organization;
-    } else {
+    }
+    if (this.userRole.value === this.availableUserRoles[1].value) {
       delete this.form.value.neighbourhood;
     }
     delete this.form.value.userRole;
@@ -100,7 +101,13 @@ export class UserCreatePage implements OnInit {
 
   private initForm() {
     this.form = this.fb.group({
-      username: [null, [Validators.required]],
+      username: [
+        null,
+        [
+          Validators.required,
+          Validators.pattern(/^[\w-.+_@]{4,12}$/),
+        ],
+      ],
       email: [null, [Validators.required, Validators.email]],
       password: [
         null,
@@ -126,7 +133,7 @@ export class UserCreatePage implements OnInit {
 
     if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
       this.showOrganizations = true;
-      this.form.controls.userRole.patchValue(this.availableUserRoles[0].value);
+      this.form.controls.userRole.patchValue(this.availableUserRoles[1].value);
       this.form.controls.organization.setValidators([Validators.required]);
       this.availableOrganizations$ =
         this.dashboardService.getOrganizationsByNeighbourhoodId(

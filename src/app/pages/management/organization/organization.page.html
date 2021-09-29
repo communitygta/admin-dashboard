@@ -88,6 +88,13 @@
         </ion-label>
       </div>
 
+      <div class="form-item width-50" *ngIf="neighbourhood$ | async as neighbourhood">
+        <div class="item-label">
+          Neighbourhood
+        </div>
+        <ion-label>{{ neighbourhood.name }}</ion-label>
+      </div>
+
       <div class="form-item width-50">
         <div class="item-label">
           Charity Number

@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Action logs</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="content-wrapper">
+    <ion-item>
+      <ion-input clearInput (ionChange)="onFilter($event)" placeholder="filter by user name" [(ngModel)]="filterInput">
+      </ion-input>
+      <div class="actions-selection" slot="end">
+        <ion-button (click)="toggleAction(action)" fill="outline" [class.selected]="action.selected"
+          *ngFor="let action of actions">{{ action.name }}</ion-button>
+      </div>
+    </ion-item>
+  </div>
+
+  <div class="content-wrapper" *ngIf="logs">
+    <table>
+      <thead>
+        <tr>
+          <td>User Name</td>
+          <td>Action</td>
+          <td>Note</td>
+          <td>Time</td>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let log of logs">
+          <td>{{ log.user.username }}</td>
+          <td>{{ log.action }}</td>
+          <td>{{ log.note }}</td>
+          <td>{{ log.created_at | date: 'yyyy-MM-dd HH:mm' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</ion-content>

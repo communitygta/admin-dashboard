@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 import { AppService } from 'src/app/core/services/app.service';
 import { AuthService, UserRole } from 'src/app/core/services/auth.service';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
@@ -21,40 +22,16 @@ export class ProgramEditPage implements OnInit {
   form: FormGroup;
   addVideoLinkForm: FormGroup;
   addImageForm: FormGroup;
-  languages = this.appService.appData.Language;
-  populationGroups = this.appService.appData.PopulationGroup;
-  focuses = this.appService.appData.Focus;
+  languages: Array<any>;
+  populationGroups: Array<any>;
+  focuses: Array<any>;
   defaultNewImageUrl = 'assets/images/add-image.svg';
   newImageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
     this.defaultNewImageUrl
   );
   availableOrganizations: Array<any>;
   currentOrganization;
-  program$ = this.dashboardService
-    .getProgramById(this.activatedRoute.snapshot.params.id)
-    .pipe(
-      tap((res) => {
-        this.languages.map((language) => {
-          language.selected = !!res.languages.find(
-            (item) => item.id === language.id
-          );
-          return language;
-        });
-        this.populationGroups.map((populationGroup) => {
-          populationGroup.selected = !!res.population_groups.find(
-            (item) => item.id === populationGroup.id
-          );
-          return populationGroup;
-        });
-        this.focuses.map((focus) => {
-          focus.selected = !!res.focuses.find((item) => item.id === focus.id);
-          return focus;
-        });
-        this.form.patchValue(res);
-        this.initAddVideoLinkForm();
-        this.initAddImageForm();
-      })
-    );
+  program$: Observable<any>;
 
   constructor(
     private dashboardService: DashboardService,
@@ -70,29 +47,80 @@ export class ProgramEditPage implements OnInit {
   }
 
   ngOnInit() {
-    if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
-      this.getOrganizationSelections(
-        this.authService.userProfile$.getValue().profile.neighbourhood.id
+    if (this.authService.userRole === UserRole.superAdmin) {
+      this.program$ = this.dashboardService.getAllOrganizations().pipe(
+        switchMap((organizations) => {
+          this.availableOrganizations = organizations;
+          return this.getProgram();
+        })
       );
     }
 
-    if (this.authService.userRole === UserRole.organizationAdmin) {
-      this.currentOrganization = this.appService.appData.Organization.find(
-        (item) =>
-          item.id ===
-          this.authService.userProfile$.getValue().profile.organization.id
-      );
+    if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
+      this.program$ = this.dashboardService
+        .getOrganizationsByNeighbourhoodId(
+          this.authService.userProfile$.getValue().profile.neighbourhood.id
+        )
+        .pipe(
+          switchMap((organizations) => {
+            this.availableOrganizations = organizations;
+            return this.getProgram();
+          })
+        );
     }
+
+    if (this.authService.userRole === UserRole.organizationAdmin) {
+      this.currentOrganization =
+        this.authService.userProfile$.getValue().profile.organization;
+      this.program$ = this.getProgram();
+    }
+  }
+
+  getProgram(): Observable<any> {
+    const options = {
+      languages: 'true',
+      populationGroups: 'true',
+      focuses: 'true',
+    };
+    return this.dashboardService.getOptions(options).pipe(
+      switchMap((res) => {
+        this.languages = res.languages;
+        this.populationGroups = res.populationGroups;
+        this.focuses = res.focuses;
+        return this.dashboardService
+          .getProgramById(this.activatedRoute.snapshot.params.id)
+          .pipe(
+            tap((program) => {
+              this.languages.map((language) => {
+                language.selected = !!program.languages.find(
+                  (item) => item.id === language.id
+                );
+                return language;
+              });
+              this.populationGroups.map((populationGroup) => {
+                populationGroup.selected = !!program.population_groups.find(
+                  (item) => item.id === populationGroup.id
+                );
+                return populationGroup;
+              });
+              this.focuses.map((focus) => {
+                focus.selected = !!program.focuses.find(
+                  (item) => item.id === focus.id
+                );
+                return focus;
+              });
+              this.form.patchValue(program);
+              this.form.controls.organization.setValue(program.organization.id);
+              this.initAddVideoLinkForm();
+              this.initAddImageForm();
+            })
+          );
+      })
+    );
   }
 
   get logo() {
     return this.form.controls.logo;
-  }
-
-  getOrganizationSelections(neighbourhoodId) {
-    this.availableOrganizations = this.appService.appData.Organization.filter(
-      (item) => item.neighbourhood === neighbourhoodId
-    );
   }
 
   initForm() {
@@ -108,9 +136,9 @@ export class ProgramEditPage implements OnInit {
       images: [null],
       languages: [null],
       location: [null],
-      name: [null],
+      name: [null, [Validators.required]],
       neighbourhoods: [null],
-      organization: [null],
+      organization: [null, [Validators.required]],
       population_groups: [null],
       staff_contact: [null],
       staff_name: [null],
@@ -199,17 +227,32 @@ export class ProgramEditPage implements OnInit {
         URL.createObjectURL(file)
       );
       this.addImageForm.get('image').setValue(file);
+      event.target.value = '';
     }
   }
 
   addNewImage(program) {
     if (this.addImageForm.invalid) {
-      return;
+      if (this.addImageForm.controls.image.invalid) {
+        this.inAppMessageService.simpleToast(
+          'Please upload a new image',
+          'bottom'
+        );
+        return;
+      }
+      if (this.addImageForm.controls.name.invalid) {
+        this.inAppMessageService.simpleToast(
+          'Please input a name for the new image',
+          'bottom'
+        );
+        return;
+      }
     }
     this.dashboardService
       .addProgramImage(this.addImageForm.value)
       .subscribe((res) => {
-        this.addImageForm.reset();
+        this.addImageForm.controls.image.reset();
+        this.addImageForm.controls.name.reset();
         this.inAppMessageService.simpleToast(
           'A new image has been added.',
           'bottom'
@@ -247,6 +290,11 @@ export class ProgramEditPage implements OnInit {
   }
 
   save() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.inAppMessageService.simpleToast('Please fill in all required fields.', 'bottom');
+      return;
+    }
     const payload = Object.assign({}, this.form.value);
     delete payload.neighbourhood;
     const selectedLanguages = this.languages.filter(
@@ -259,7 +307,6 @@ export class ProgramEditPage implements OnInit {
     payload.languages = selectedLanguages;
     payload.population_groups = selectedPopulationGroups;
     payload.focuses = selectedFocuses;
-    payload.organization = payload.organization.id;
     this.dashboardService.updateProgram(payload).subscribe((res) => {
       this.inAppMessageService.simpleAlert(
         'Message',

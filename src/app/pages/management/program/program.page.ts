@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController, NavController } from '@ionic/angular';
+import { Observable } from 'rxjs';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
 
 @Component({
@@ -9,9 +10,7 @@ import { DashboardService } from 'src/app/core/services/dashboard.service';
   styleUrls: ['./program.page.scss'],
 })
 export class ProgramPage implements OnInit {
-  program$ = this.dashboardService.getProgramById(
-    this.activatedRoute.snapshot.params.id
-  );
+  program$: Observable<any>;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -21,6 +20,12 @@ export class ProgramPage implements OnInit {
   ) {}
 
   ngOnInit() {}
+
+  ionViewWillEnter() {
+    this.program$ = this.dashboardService.getProgramById(
+      this.activatedRoute.snapshot.params.id
+    );
+  }
 
   async removeProgram(program) {
     const alert = await this.alertController.create({

@@ -24,13 +24,13 @@
         </ion-item>
       </div>
 
-      <div class="content-wrapper selection" *ngIf='availableOrganizations'>
+      <div class="content-wrapper selection" *ngIf='availableOrganizations$'>
         <ion-item style="--padding-start: 0;">
           <ion-label style="display: none;">Select an organization</ion-label>
           <ion-select placeholder="filter by organization" (ionChange)="onSelect($event)"
             [(ngModel)]="selectedOrganization">
             <ion-select-option value="0">None</ion-select-option>
-            <ion-select-option *ngFor="let availableOrganization of availableOrganizations;"
+            <ion-select-option *ngFor="let availableOrganization of availableOrganizations$ | async;"
               [value]="availableOrganization.id">{{ availableOrganization.name }}</ion-select-option>
           </ion-select>
         </ion-item>

@@ -18,7 +18,7 @@ export class ProgramsPage implements OnInit {
   filterInput: string;
   selectedOrganization;
   userRole: UserRole;
-  availableOrganizations: Array<any>;
+  availableOrganizations$: Observable<any>;
 
   constructor(
     private authService: AuthService,
@@ -29,9 +29,7 @@ export class ProgramsPage implements OnInit {
   ngOnInit() {}
 
   getOrganizationSelections(neighbourhoodId) {
-    this.availableOrganizations = this.appService.appData.Organization.filter(
-      (item) => item.neighbourhood === +neighbourhoodId
-    );
+    this.availableOrganizations$ = this.dashboardService.getOrganizationsByNeighbourhoodId(neighbourhoodId);
   }
 
   onFilter(event) {

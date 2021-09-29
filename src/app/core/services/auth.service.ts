@@ -2,8 +2,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, pluck, switchMap, tap } from 'rxjs/operators';
 import { API } from '../constants/api.constant';
+import { Actionlog } from '../models/Actionlog.model';
 
 export const TOKEN_KEY = 'token';
 export enum UserRole {
@@ -99,6 +100,10 @@ export class AuthService {
         return userProfile;
       })
     );
+  }
+
+  getActionlogs(): Observable<Actionlog[]> {
+    return this.http.get(API.PREFIX + API.GET_ACTIONLOGS).pipe(pluck('results'));
   }
 
   setupUserRole(userProfile) {

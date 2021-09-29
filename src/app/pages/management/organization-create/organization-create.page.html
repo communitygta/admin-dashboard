@@ -18,7 +18,9 @@
     <form [formGroup]="form">
 
       <ion-item>
-        <ion-label position="stacked">Name</ion-label>
+        <ion-label position="stacked">Name <ion-text *ngIf="form.controls.name.touched && form.controls.name.invalid"
+            color="danger">(required)</ion-text>
+        </ion-label>
         <ion-input formControlName="name"></ion-input>
       </ion-item>
 
@@ -60,6 +62,17 @@
         </div>
       </ion-item>
 
+      <ion-item *ngIf="neighbourhoods$">
+        <ion-label position="stacked">Neighbourhood <ion-text
+            *ngIf="form.controls.neighbourhood.touched && form.controls.neighbourhood.invalid" color="danger">(required)
+          </ion-text>
+        </ion-label>
+        <ion-select formControlName="neighbourhood" placeholder="select a neighbourhood">
+          <ion-select-option *ngFor="let neighbourhood of neighbourhoods$ | async" [value]="neighbourhood.id">{{
+            neighbourhood.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
       <ion-item>
         <ion-label position="stacked">Charity Number</ion-label>
         <ion-input formControlName="charity_number"></ion-input>
@@ -71,12 +84,12 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">Number of Full-time Staff</ion-label>
+        <ion-label position="stacked">Number of Full-time Staff (eg: 50)</ion-label>
         <ion-input formControlName="full_time_staff"></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">Number of Part-time Staff</ion-label>
+        <ion-label position="stacked">Number of Part-time Staff (eg: 20)</ion-label>
         <ion-input formControlName="part_time_staff"></ion-input>
       </ion-item>
 

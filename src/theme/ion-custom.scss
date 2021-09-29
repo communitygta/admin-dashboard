@@ -15,3 +15,14 @@ ion-alert {
         color: var(--ion-color-danger);
     }
 }
+
+ion-item {
+    &.item-label-stacked {
+        ion-label {
+            font-size: 18px !important;
+            font-weight: bold;
+            color: #444444 !important;
+            margin-bottom: 10px !important;
+        }
+    }
+}

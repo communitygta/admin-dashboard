@@ -15,21 +15,22 @@
 <ion-content>
 
   <div class="content-wrapper" *ngIf="userProfiles$ | async as userProfiles">
-    <ion-item *ngFor="let userProfile of userProfiles" [routerLink]="['/user-edit', userProfile.id]"
-      lines="full">
-      <ion-label class="ion-text-wrap"> {{ userProfile.user.username }} <ion-chip color="warning" *ngIf="!userProfile.user.is_active">
-          <ion-label>Inactive</ion-label>
+    <ion-item *ngFor="let userProfile of userProfiles" [routerLink]="['/user-edit', userProfile.id]" lines="full">
+      <ion-label class="ion-text-wrap"> {{ userProfile.user.username }} <ion-chip *ngIf="!userProfile.user.is_active">
+          inactive
         </ion-chip> <br>
         <ion-note>{{ userProfile.user.email || 'N/A' }}</ion-note>
       </ion-label>
       <ion-label slot="end" class="ion-text-wrap ion-text-right">
         <ng-container *ngIf="userProfile.neighbourhood">
           Neighbourhood Admin
-          <br><ion-badge>{{userProfile.neighbourhood.name}}</ion-badge>
+          <br>
+          <ion-badge>{{userProfile.neighbourhood.name}}</ion-badge>
         </ng-container>
         <ng-container *ngIf="userProfile.organization">
           Organization Admin
-          <br><ion-badge>{{userProfile.organization.name}}</ion-badge>
+          <br>
+          <ion-badge>{{userProfile.organization.name}}</ion-badge>
         </ng-container>
       </ion-label>
     </ion-item>

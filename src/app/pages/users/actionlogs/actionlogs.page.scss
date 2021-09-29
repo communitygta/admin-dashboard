@@ -1,0 +1,61 @@
+:host {
+    ion-content {
+        .content-wrapper {
+            margin: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 3px 10px rgb(0 0 0 / 20%);
+            overflow: hidden;
+            padding: 20px 20px;
+            position: relative;
+            overflow-x: auto;
+
+            ion-item {
+                ion-select {
+                    width: 220px;
+                }
+
+                .actions-selection {
+                    margin: 12px 0 10px;
+
+                    ion-button {
+                        --border-style: dashed;
+                        --border-width: 1px;
+
+                        &.selected {
+                            --border-style: solid;
+                            --border-width: 1px;
+                            --background: var(--ion-color-primary);
+                            --color: #ffffff;
+                        }
+                    }
+                }
+            }
+
+            table {
+                width: 100%;
+                color: #444444;
+                min-width: 800px;
+
+                thead {
+                    td {
+                        font-weight: bold;
+                        background-color: #eeeeee;
+                        padding: 8px;
+                    }
+                }
+
+                tbody {
+                    tr {
+                        &:hover {
+                            background-color: #dddddd;
+                        }
+
+                        td {
+                            padding: 8px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -107,6 +107,10 @@ const routes: Routes = [
     path: 'focuses',
     loadChildren: () => import('./pages/management/focuses/focuses.module').then( m => m.FocusesPageModule)
   },
+  {
+    path: 'actionlogs',
+    loadChildren: () => import('./pages/users/actionlogs/actionlogs.module').then( m => m.ActionlogsPageModule)
+  },
 ];
 
 @NgModule({

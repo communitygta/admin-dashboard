@@ -12,13 +12,14 @@ import { mergeMap, catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { InAppMessageService } from '../services/in-app-message.service';
 import { ERROR_MESSAGE } from '../constants/errors.constant';
+import { AuthService } from '../services/auth.service';
 
 /**
  * 默认HTTP拦截器，其注册细节见 `app.module.ts`
  */
 @Injectable()
 export class AppInterceptor implements HttpInterceptor {
-  constructor(private inAppMessageService: InAppMessageService) {}
+  constructor(private inAppMessageService: InAppMessageService, private authService: AuthService) {}
 
   public intercept(
     req: HttpRequest<any>,
@@ -59,11 +60,16 @@ export class AppInterceptor implements HttpInterceptor {
     switch (response.status) {
       case 200:
         break;
+      case 401:
+        this.inAppMessageService.simpleToast(ERROR_MESSAGE['error.401']);
+        localStorage.clear();
+        this.authService.isAuth$.next(false);
+        break;
       case 403:
-        this.inAppMessageService.simpleToast('error.403');
+        this.inAppMessageService.simpleToast(ERROR_MESSAGE['error.403']);
         break;
       case 0:
-        this.inAppMessageService.simpleToast('error.request.cancelled');
+        this.inAppMessageService.simpleToast(ERROR_MESSAGE['error.network.issue']);
         break;
       default:
         if (response instanceof HttpErrorResponse) {
@@ -77,7 +83,7 @@ export class AppInterceptor implements HttpInterceptor {
             msg = response.error.username[0];
           }
 
-          this.inAppMessageService.simpleToast(msg, 'middle');
+          this.inAppMessageService.simpleToast(msg, 'middle', 3000);
 
           return throwError(response);
         }

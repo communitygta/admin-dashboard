@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController, NavController } from '@ionic/angular';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
 import { InAppMessageService } from 'src/app/core/services/in-app-message.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-organization',
@@ -13,6 +15,8 @@ import { InAppMessageService } from 'src/app/core/services/in-app-message.servic
 })
 export class OrganizationPage implements OnInit {
   organization$: Observable<any>;
+  neighbourhood$: Observable<any>;
+  appUrl = environment.appUrl;
 
   constructor(
     private dashboardService: DashboardService,
@@ -26,9 +30,16 @@ export class OrganizationPage implements OnInit {
   ngOnInit() {}
 
   ionViewWillEnter() {
-    this.organization$ = this.dashboardService.getOrganizationById(
-      this.activatedRoute.snapshot.params.id
-    );
+    this.organization$ = this.dashboardService
+      .getOrganizationById(this.activatedRoute.snapshot.params.id)
+      .pipe(
+        tap(
+          (organization) =>
+            (this.neighbourhood$ = this.dashboardService.getNeighbourhood(
+              organization.neighbourhood
+            ))
+        )
+      );
   }
 
   async removeOrganization(organization) {
@@ -47,7 +58,10 @@ export class OrganizationPage implements OnInit {
             this.dashboardService
               .deleteOrganization(organization)
               .subscribe((res) => {
-                this.inAppMessageService.simpleToast('The organization has been deleted.', 'bottom');
+                this.inAppMessageService.simpleToast(
+                  'The organization has been deleted.',
+                  'bottom'
+                );
                 this.navController.navigateBack('/organizations');
               });
           },

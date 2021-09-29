@@ -81,6 +81,11 @@ export class AppComponent implements OnInit {
           icon: 'people',
         });
         this.submenu.push({
+          title: 'Action logs',
+          url: '/actionlogs',
+          icon: 'reader',
+        });
+        this.submenu.push({
           title: 'My Profile',
           url: '/user-profile',
           icon: 'person-circle',
