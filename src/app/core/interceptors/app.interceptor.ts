@@ -61,7 +61,13 @@ export class AppInterceptor implements HttpInterceptor {
       case 200:
         break;
       case 401:
-        this.inAppMessageService.simpleToast(ERROR_MESSAGE['error.401']);
+        if (response instanceof HttpErrorResponse) {
+          if (response.error && response.error.error) {
+            this.inAppMessageService.simpleToast(ERROR_MESSAGE[response.error.error]);
+          } else {
+            this.inAppMessageService.simpleToast(ERROR_MESSAGE['error.401']);
+          }
+        }
         localStorage.clear();
         this.authService.isAuth$.next(false);
         break;
