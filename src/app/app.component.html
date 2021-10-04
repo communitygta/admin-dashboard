@@ -3,11 +3,14 @@
     <ion-menu contentId="main-content" type="overlay" [hidden]="!isAuth">
       <ion-content>
         <ion-list id="inbox-list" *ngIf="userProfile$ | async as userProfile">
-          <ion-list-header>Community GTA</ion-list-header>
+          <ion-list-header><img src="assets/images/hello-neighbour.png" ></ion-list-header>
 
           <ion-label class="user-role" *ngIf="authService.userRole === 0"><ion-badge>Super User</ion-badge></ion-label>
           <ion-label class="user-role" *ngIf="authService.userRole === 1"><ion-badge>Neighbourhood Admin</ion-badge></ion-label>
           <ion-label class="user-role" *ngIf="authService.userRole === 2"><ion-badge>Organization Admin</ion-badge></ion-label>
+
+          <ion-label class="user-role"><ion-badge color="secondary" *ngIf="neighbourhood">{{ neighbourhood?.name }}</ion-badge></ion-label>
+          <ion-label class="user-role"><ion-badge color="success" *ngIf="organization">{{ organization?.name }}</ion-badge></ion-label>
 
           <ion-note>Hello <strong>{{ userProfile?.user.username }}</strong> !</ion-note>
 

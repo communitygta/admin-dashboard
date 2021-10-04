@@ -11,6 +11,7 @@ export const API = {
     UPDATE_PROFILE_BY_SUPER_USER: 'update-user-profile-by-super-user/',
     CREATE_USER_BY_ADMIN: 'admin-panel/create-user/',
     DELETE_USER_BY_SUPER_USER: 'delete-user-by-super-user/',
+    UPDATE_USER_EMAIL_BY_OWNER: 'update-user-email-by-owner',
     GET_ACTIONLOGS: 'admin-panel/v1/actionlogs/', // admin-panel/v1/actionlogs?user=1&action=update
     // options
     GET_GENERAL_OPTIONS: 'admin-panel/v1/general-options?',

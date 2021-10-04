@@ -45,6 +45,15 @@ export class OrganizationEditPage implements OnInit {
   ngOnInit() {
     this.initForm();
 
+    if (this.authService.userRole === UserRole.organizationAdmin) {
+      this.organization$ = this.dashboardService.getAllLanguages().pipe(
+        switchMap((languages) => {
+          this.languages = languages;
+          return this.getOrganization();
+        })
+      );
+    }
+
     if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
       this.organization$ = this.dashboardService.getAllLanguages().pipe(
         switchMap((languages) => {

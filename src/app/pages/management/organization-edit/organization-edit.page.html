@@ -124,7 +124,9 @@
           </p>
           <ion-button class="icon-only" fill="clear" slot="end" size="large"
             (click)="removeVideoLink(link, organization, i)">
-            <ion-icon name="trash-outline" size="small" color="danger"></ion-icon>
+            <div class="icon-on-top delete">
+              <ion-icon name="trash-outline" size="small" color="danger"></ion-icon>delete
+            </div>
           </ion-button>
         </div>
         <div lines="full" class="add-video-link link-item">
@@ -133,7 +135,9 @@
             <input placeholder="new video link" type="text" formControlName="link">
           </p>
           <ion-button class="icon-only" fill="clear" slot="end" size="large" (click)="addVideoLink(organization)">
-            <ion-icon name="add-outline" size="small"></ion-icon>
+            <div class="icon-on-top">
+              <ion-icon name="add-outline" size="small"></ion-icon> add
+            </div>
           </ion-button>
         </div>
       </form>
@@ -144,8 +148,10 @@
           <a [href]="image.image" target="_blank"><img [src]="image.image" /></a>
           <ion-card-header>
             <ion-card-title [title]="image.name">{{ image.name }}
-              <ion-button fill="clear" size="small" class="icon-only" (click)="removeImage(image, organization, i)">
-                <ion-icon name="trash-outline" color="danger"></ion-icon>
+              <ion-button fill="clear" size="small" class="icon-only" color="danger" (click)="removeImage(image, organization, i)">
+                <div class="icon-on-top delete">
+                  <ion-icon name="trash-outline" color="danger"></ion-icon> delete
+                </div>
               </ion-button>
             </ion-card-title>
           </ion-card-header>
@@ -159,7 +165,9 @@
             <ion-card-title>
               <input placeholder="new image title" formControlName="name">
               <ion-button fill="clear" size="small" class="icon-only" (click)="addNewImage(organization)">
-                <ion-icon name="save-outline"></ion-icon>
+                <div class="icon-on-top">
+                  <ion-icon name="save-outline"></ion-icon> save
+                </div>
               </ion-button>
             </ion-card-title>
           </ion-card-header>

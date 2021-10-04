@@ -14,26 +14,67 @@
 
 <ion-content>
 
-  <div class="content-wrapper" *ngIf="userProfiles$ | async as userProfiles">
-    <ion-item *ngFor="let userProfile of userProfiles" [routerLink]="['/user-edit', userProfile.id]" lines="full">
-      <ion-label class="ion-text-wrap"> {{ userProfile.user.username }} <ion-chip *ngIf="!userProfile.user.is_active">
-          inactive
-        </ion-chip> <br>
-        <ion-note>{{ userProfile.user.email || 'N/A' }}</ion-note>
-      </ion-label>
-      <ion-label slot="end" class="ion-text-wrap ion-text-right">
-        <ng-container *ngIf="userProfile.neighbourhood">
-          Neighbourhood Admin
-          <br>
-          <ion-badge>{{userProfile.neighbourhood.name}}</ion-badge>
-        </ng-container>
-        <ng-container *ngIf="userProfile.organization">
-          Organization Admin
-          <br>
-          <ion-badge>{{userProfile.organization.name}}</ion-badge>
-        </ng-container>
-      </ion-label>
-    </ion-item>
+
+
+  <div class="wrapper">
+    <div class="content-wrapper filter">
+      <ion-item>
+        <ion-label position="stacked">User name filter</ion-label>
+        <ion-input clearInput (ionChange)="onFilter($event)" placeholder="filter by program name"
+          [(ngModel)]="filterInput"></ion-input>
+      </ion-item>
+    </div>
+
+    <div class="content-wrapper selection" *ngIf='availableOrganizations$'>
+      <ion-item>
+        <ion-label position="stacked">Organization filter</ion-label>
+        <ion-select placeholder="filter by organization" (ionChange)="onOrganizationSelect($event)"
+          [(ngModel)]="selectedOrganizationId">
+          <ion-select-option value="0">None</ion-select-option>
+          <ion-select-option *ngFor="let availableOrganization of availableOrganizations$ | async;"
+            [value]="availableOrganization.id">{{ availableOrganization.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+
+    <div class="content-wrapper selection" *ngIf='availableNeighbourhoods$'>
+      <ion-item>
+        <ion-label position="stacked">Neighbourhood filter</ion-label>
+        <ion-select placeholder="filter by neighbourhood" (ionChange)="onNeighbourhoodSelect($event)"
+          [(ngModel)]="selectedNeighbourhoodId">
+          <ion-select-option value="0">None</ion-select-option>
+          <ion-select-option *ngFor="let availableNeighbourhood of availableNeighbourhoods$ | async;"
+            [value]="availableNeighbourhood.id">{{ availableNeighbourhood.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+
+    <div class="content-wrapper">
+      <ion-item *ngFor="let userProfile of profiles" [routerLink]="['/user-edit', userProfile.id]" lines="full">
+        <ion-label class="ion-text-wrap"> {{ userProfile.user.username }} <ion-chip *ngIf="!userProfile.user.is_active">
+            inactive
+          </ion-chip> <br>
+          <ion-note>{{ userProfile.user.email || 'N/A' }}</ion-note>
+        </ion-label>
+        <ion-label slot="end" class="ion-text-wrap ion-text-right">
+          <ng-container *ngIf="userProfile.neighbourhood">
+            Neighbourhood Admin
+            <br>
+            <ion-badge>{{userProfile.neighbourhood.name}}</ion-badge>
+          </ng-container>
+          <ng-container *ngIf="userProfile.organization">
+            Organization Admin
+            <br>
+            <ion-badge>{{userProfile.organization.name}}</ion-badge>
+          </ng-container>
+        </ion-label>
+      </ion-item>
+      <ion-item *ngIf="!profiles || profiles.length === 0">
+        <ion-label>No results</ion-label>
+      </ion-item>
+    </div>
   </div>
+
+
 
 </ion-content>

@@ -88,6 +88,10 @@ export class AuthService {
     );
   }
 
+  updateUserEmailByOwner(payload: { email: string }): Observable<any> {
+    return this.http.put(API.PREFIX + API.UPDATE_USER_EMAIL_BY_OWNER, payload);
+  }
+
   createUserByAdmin(userInfo): Observable<any> {
     return this.http.post(API.PREFIX + API.CREATE_USER_BY_ADMIN, userInfo);
   }
@@ -103,7 +107,9 @@ export class AuthService {
   }
 
   getActionlogs(): Observable<Actionlog[]> {
-    return this.http.get(API.PREFIX + API.GET_ACTIONLOGS).pipe(pluck('results'));
+    return this.http
+      .get(API.PREFIX + API.GET_ACTIONLOGS)
+      .pipe(pluck('results'));
   }
 
   setupUserRole(userProfile) {

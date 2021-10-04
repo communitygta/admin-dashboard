@@ -21,6 +21,7 @@ export class UserProfilePage implements OnInit {
     managing: any;
   };
   form: FormGroup;
+  editForm: FormGroup;
 
   constructor(
     private authService: AuthService,
@@ -31,8 +32,13 @@ export class UserProfilePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.formatProfile();
+    this.initEditForm();
     this.initForm();
+    this.formatProfile();
+  }
+
+  get email() {
+    return this.editForm.controls.email;
   }
 
   get old_password() {
@@ -41,6 +47,12 @@ export class UserProfilePage implements OnInit {
 
   get new_password() {
     return this.form.controls.new_password;
+  }
+
+  initEditForm() {
+    this.editForm = this.fb.group({
+      email: [null, [Validators.required, Validators.email]],
+    });
   }
 
   initForm() {
@@ -89,6 +101,23 @@ export class UserProfilePage implements OnInit {
       this.userProfile.role = 'Organization Administrator';
       this.userProfile.managing = userProfile.profile.organization;
     }
+
+    this.editForm.controls.email.patchValue(this.userProfile.email);
+  }
+
+  updateEmail() {
+    if (this.editForm.invalid) {
+      this.inAppMessageService.simpleToast(
+        'Please input a valid email address.',
+        'middle'
+      );
+      return;
+    }
+    this.authService
+      .updateUserEmailByOwner(this.editForm.value)
+      .subscribe(() => {
+        this.inAppMessageService.simpleToast('Email updated.', 'bottom');
+      });
   }
 
   updatePassword() {

@@ -9,7 +9,7 @@
 
 <ion-content>
   <div class="wrapper">
-    <div class="content-wrapper">
+    <form [formGroup]="editForm" class="content-wrapper">
 
       <ion-item lines="none">
         <ion-label>User Name</ion-label>
@@ -27,10 +27,15 @@
       </ion-item>
 
       <ion-item lines="none">
-        <ion-label>Email</ion-label>
-        <ion-note slot="end">{{ userProfile.email || 'N/A' }}</ion-note>
+        <ion-label>Email <ion-icon name="checkmark-circle" color="success"
+          *ngIf="email.dirty && email.valid">
+        </ion-icon>
+        <ion-icon name="alert-circle" color="warning" *ngIf="email.dirty && email.invalid"></ion-icon></ion-label>
+        <ion-input formControlName="email"></ion-input>
       </ion-item>
-    </div>
+
+      <ion-button style="margin: 10px 16px 10px 0;float: right;" size="small" [disabled]="!email.dirty" (click)="updateEmail()">update</ion-button>
+    </form>
 
     <form [formGroup]="form" class="content-wrapper update-password" (ngSubmit)="updatePassword()">
       <ion-item lines="full">

@@ -28,8 +28,13 @@ export class ProgramsPage implements OnInit {
 
   ngOnInit() {}
 
-  getOrganizationSelections(neighbourhoodId) {
-    this.availableOrganizations$ = this.dashboardService.getOrganizationsByNeighbourhoodId(neighbourhoodId);
+  getOrganizationSelections(neighbourhoodId?) {
+    if (this.authService.userRole === UserRole.superAdmin) {
+      this.availableOrganizations$ = this.dashboardService.getAllOrganizations();
+    }
+    if (this.authService.userRole === UserRole.neighbourhoodAdmin) {
+      this.availableOrganizations$ = this.dashboardService.getOrganizationsByNeighbourhoodId(neighbourhoodId);
+    }
   }
 
   onFilter(event) {
@@ -71,6 +76,7 @@ export class ProgramsPage implements OnInit {
   ionViewWillEnter() {
     this.userRole = this.authService.userRole;
     if (this.authService.userRole === UserRole.superAdmin) {
+      this.getOrganizationSelections();
       this.dashboardService.getAllPrograms().subscribe((res) => {
         this.programs = res;
         this.oriPrograms = res;

@@ -123,9 +123,9 @@
           <p>{{link.name}}<br>
             <a [href]="link.link" target="_blank">{{link.link}}</a>
           </p>
-          <ion-button class="icon-only" fill="clear" slot="end" size="large" color="danger"
+          <ion-button fill="clear" slot="end" size="large" color="danger"
             (click)="removeVideoLink(link, program, i)">
-            <ion-icon name="trash-outline" size="small" color="danger"></ion-icon>
+            <div class="icon-on-top"><ion-icon name="trash-outline" size="small" color="danger"></ion-icon>delete</div>
           </ion-button>
         </div>
         <div class="add-video-link link-item">
@@ -133,8 +133,8 @@
             <input placeholder="new video title" type="text" formControlName="name"><br>
             <input placeholder="new video link" type="text" formControlName="link">
           </p>
-          <ion-button class="icon-only" fill="clear" slot="end" size="large" (click)="addVideoLink(program)">
-            <ion-icon name="add-outline" size="small"></ion-icon>
+          <ion-button fill="clear" slot="end" size="large" (click)="addVideoLink(program)">
+            <div class="icon-on-top"><ion-icon name="add-outline" size="small"></ion-icon> Add</div>
           </ion-button>
         </div>
       </form>
@@ -145,8 +145,8 @@
           <a [href]="image.image" target="_blank"><img [src]="image.image" /></a>
           <ion-card-header>
             <ion-card-title [title]="image.name">{{ image.name }}
-              <ion-button fill="clear" size="small" class="icon-only" (click)="removeImage(image, program, i)">
-                <ion-icon name="trash-outline" color="danger"></ion-icon>
+              <ion-button fill="clear" size="small" (click)="removeImage(image, program, i)">
+                <div class="icon-on-top delete"><ion-icon name="trash-outline" color="danger"></ion-icon> delete</div>
               </ion-button>
             </ion-card-title>
           </ion-card-header>
@@ -159,8 +159,8 @@
           <ion-card-header>
             <ion-card-title>
               <input placeholder="new image title" formControlName="name">
-              <ion-button fill="clear" size="small" class="icon-only" (click)="addNewImage(program)">
-                <ion-icon name="save-outline"></ion-icon>
+              <ion-button fill="clear" size="small" (click)="addNewImage(program)">
+                <div class="icon-on-top"><ion-icon name="save-outline"></ion-icon> save</div>
               </ion-button>
             </ion-card-title>
           </ion-card-header>

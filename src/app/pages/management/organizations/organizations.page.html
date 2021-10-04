@@ -14,19 +14,38 @@
   </ion-header>
 
   <ion-content>
-    <div class="content-wrapper filter">
-      <ion-item>
-        <ion-input clearInput (ionChange)="onFilter($event)" placeholder="filter by organization name"></ion-input>
-      </ion-item>
+    <div class="wrapper">
+      <div class="content-wrapper filter">
+        <ion-item>
+          <ion-label position="stacked">Organization name filter</ion-label>
+          <ion-input clearInput (ionChange)="onFilter($event)" placeholder="filter by organization name"
+            [(ngModel)]="filterInput"></ion-input>
+        </ion-item>
+      </div>
+
+      <div class="content-wrapper selection" *ngIf='availableNeighbourhoods'>
+        <ion-item>
+          <ion-label position="stacked">Neighbourhood filter</ion-label>
+          <ion-select placeholder="filter by neighbourhood" (ionChange)="onNeighbourhoodSelect($event)"
+            [(ngModel)]="selectedNeighbourhoodId">
+            <ion-select-option value="0">None</ion-select-option>
+            <ion-select-option *ngFor="let availableNeighbourhood of availableNeighbourhoods"
+              [value]="availableNeighbourhood.id">{{ availableNeighbourhood.name }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
+
+      <div class="content-wrapper">
+        <ion-item *ngFor="let organization of organizations" button lines="full"
+          [routerLink]="['/organizations', organization.id]">
+          <ion-label class="ion-text-wrap"> {{ organization.name }} <ng-container *ngIf="showNeighbourhoodName"><ion-note>{{organization.neighbourhood.name}}</ion-note></ng-container></ion-label>
+          <ion-note slot="end">Programs: {{ organization.total_programs }}</ion-note>
+        </ion-item>
+        <ion-item *ngIf="!organizations.length">
+          <ion-label>No results</ion-label>
+        </ion-item>
+      </div>
     </div>
 
-    <div class="content-wrapper">
-      <ion-item *ngFor="let organization of organizations" button lines="full"
-        [routerLink]="['/organizations', organization.id]">
-        <ion-label> {{ organization.name }} </ion-label>
-        <ion-note slot="end">Programs: {{ organization.total_programs }}</ion-note>
-      </ion-item>
-      <ion-item *ngIf="!organizations.length"><ion-label>No results</ion-label></ion-item>
-    </div>
   </ion-content>
 </ng-container>

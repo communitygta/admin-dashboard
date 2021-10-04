@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { AuthService, UserRole } from './core/services/auth.service';
+import { DashboardService } from './core/services/dashboard.service';
 
 export interface Menu {
   title: string;
@@ -17,12 +18,16 @@ export class AppComponent implements OnInit {
   public menu: Array<Menu> = [];
   public submenu: Array<Menu> = [];
 
+  organization;
+  neighbourhood;
+
   isAuth = false;
   userProfile$ = this.authService.userProfile$;
 
   constructor(
     public authService: AuthService,
-    private navController: NavController
+    private navController: NavController,
+    private dashboardService: DashboardService
   ) {}
 
   ngOnInit() {
@@ -34,12 +39,12 @@ export class AppComponent implements OnInit {
     });
     this.authService.userProfile$.subscribe((userProfile) => {
       if (userProfile) {
-        this.buildMenu();
+        this.buildMenu(userProfile);
       }
     });
   }
 
-  buildMenu() {
+  buildMenu(userProfile) {
     this.menu = [];
     this.submenu = [];
 
@@ -93,6 +98,9 @@ export class AppComponent implements OnInit {
         break;
 
       case UserRole.neighbourhoodAdmin:
+        this.neighbourhood = userProfile.profile.neighbourhood;
+        this.organization = null;
+
         this.menu.push({
           title: 'Organizations',
           url: '/organizations',
@@ -116,6 +124,12 @@ export class AppComponent implements OnInit {
         break;
 
       case UserRole.organizationAdmin:
+        this.neighbourhood = null;
+        this.organization = userProfile.profile.organization;
+        this.dashboardService
+          .getNeighbourhood(this.organization.neighbourhood)
+          .subscribe((res) => (this.neighbourhood = res));
+
         this.menu.push({
           title: 'Organization',
           url:

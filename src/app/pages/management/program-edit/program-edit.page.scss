@@ -29,7 +29,7 @@
 
                 ion-item {
                     ion-select {
-                        width: 220px;
+                        width: 360px;
                     }
 
                     .languages-selection {
@@ -70,7 +70,7 @@
                     border-bottom: 1px solid #dddddd;
                     padding-left: 16px;
                     font-size: 14px;
-                    width: 400px;
+                    width: 430px;
 
                     &.add-video-link {
                         border-bottom: none;
@@ -90,6 +90,21 @@
                     border-radius: 4px;
                     width: 300px;
                     padding-left: 6px;
+                }
+
+                ion-button {
+                    width: 90px;
+
+                    .icon-on-top {
+                        font-size: 12px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+
+                        ion-icon {
+                            font-size: 14px;
+                        }
+                    }
                 }
             }
 
@@ -113,7 +128,8 @@
                     width: 250px;
                     margin: 20px 10px;
 
-                    a, .add-image-wrapper {
+                    a,
+                    .add-image-wrapper {
                         display: flex;
                         height: 150px;
                         align-items: center;
@@ -140,6 +156,27 @@
                         border-radius: 4px;
                         padding-left: 6px;
                         max-width: 100%;
+                    }
+
+                    ion-button {
+                        .icon-on-top {
+                            font-size: 12px;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+
+                            &.delete {
+                                color: var(--ion-color-danger);
+                            }
+
+                            ion-icon {
+                                font-size: 14px;
+
+                                &[name="trash-outline"] {
+                                    font-size: 16px;
+                                }
+                            }
+                        }
                     }
                 }
             }
