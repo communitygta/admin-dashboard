@@ -14,6 +14,10 @@ ion-alert {
     .alert-button.danger {
         color: var(--ion-color-danger);
     }
+
+    &.single-select-alert {
+        --max-width: 580px !important;
+    }
 }
 
 ion-item {
