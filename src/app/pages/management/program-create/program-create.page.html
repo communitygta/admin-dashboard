@@ -17,88 +17,86 @@
 
     <form [formGroup]="form">
 
-      <ion-item>
-        <ion-label position="stacked">Name <ion-text *ngIf="form.controls.name.touched && form.controls.name.invalid"
-            color="danger">(required)</ion-text>
-        </ion-label>
+      <div class="field-item">
+        <h2>Name <ion-text *ngIf="form.controls.name.touched && form.controls.name.invalid"
+            color="danger">(required)</ion-text></h2>
         <ion-input formControlName="name"></ion-input>
-      </ion-item>
+      </div>
 
-      <ion-item>
-        <ion-label position="stacked">Description</ion-label>
-        <ion-textarea formControlName="description" autoGrow></ion-textarea>
-      </ion-item>
+      <div class="field-item">
+        <h2>Description</h2>
+        <div id="descriptionEditor"></div>
+      </div>
 
-      <ion-item>
-        <ion-label position="stacked">Location</ion-label>
+      <div class="field-item">
+        <h2>Location</h2>
         <ion-input formControlName="location"></ion-input>
-      </ion-item>
+      </div>
 
-      <ion-item>
-        <ion-label position="stacked">Eligibility</ion-label>
-        <ion-input formControlName="eligibility"></ion-input>
-      </ion-item>
+      <div class="field-item">
+        <h2>Eligibility</h2>
+        <div id="eligibilityEditor"></div>
+      </div>
 
-      <ion-item>
-        <ion-label position="stacked">Fee</ion-label>
+      <div class="field-item">
+        <h2>Fee</h2>
         <ion-input formControlName="fee"></ion-input>
-      </ion-item>
+      </div>
 
-      <ion-item>
-        <ion-label position="stacked">Frequency</ion-label>
-        <ion-input formControlName="frequency"></ion-input>
-      </ion-item>
+      <div class="field-item">
+        <h2>Frequency</h2>
+        <div id="frequencyEditor"></div>
+      </div>
 
-      <ion-item>
-        <ion-label position="stacked">How To Apply</ion-label>
-        <ion-input formControlName="how_to_apply"></ion-input>
-      </ion-item>
+      <div class="field-item">
+        <h2>How To Apply</h2>
+        <div id="howToApplyEditor"></div>
+      </div>
 
-      <ion-item lines="full">
-        <ion-label position="stacked">Select an organization <ion-text
+      <div class="field-item">
+        <h2>Select an organization <ion-text
             *ngIf="form.controls.organization.touched && form.controls.organization.invalid" color="danger">(required)
-          </ion-text>
-        </ion-label>
+          </ion-text></h2>
         <ion-select placeholder="Select" formControlName="organization">
           <ion-select-option *ngFor="let availableOrganization of availableOrganizations$ | async;"
             [value]="availableOrganization.id">{{ availableOrganization.name }}</ion-select-option>
         </ion-select>
-      </ion-item>
+      </div>
 
-      <ion-item lines="full">
-        <ion-label position="stacked">Languages</ion-label>
-        <div class="languages-selection">
+      <div class="field-item">
+        <h2>Languages</h2>
+        <div class="multiple-selection">
           <ion-button (click)="toggleLanguage(language)" fill="outline" [class.selected]="language.selected"
             *ngFor="let language of languages">{{ language.name }}</ion-button>
         </div>
-      </ion-item>
+      </div>
 
-      <ion-item lines="full">
-        <ion-label position="stacked">Focuses</ion-label>
-        <div class="languages-selection">
+      <div class="field-item">
+        <h2>Focuses</h2>
+        <div class="multiple-selection">
           <ion-button (click)="toggleFocus(focus)" fill="outline" [class.selected]="focus.selected"
             *ngFor="let focus of focuses">{{ focus.name }}</ion-button>
         </div>
-      </ion-item>
+      </div>
 
-      <ion-item lines="full">
-        <ion-label position="stacked">Population Groups</ion-label>
-        <div class="languages-selection">
+      <div class="field-item">
+        <h2>Population Groups</h2>
+        <div class="multiple-selection">
           <ion-button (click)="togglePopulationGroup(populationGroup)" fill="outline"
             [class.selected]="populationGroup.selected" *ngFor="let populationGroup of populationGroups">{{
             populationGroup.name }}</ion-button>
         </div>
-      </ion-item>
+      </div>
 
-      <ion-item>
-        <ion-label position="stacked">Staff Name</ion-label>
+      <div class="field-item">
+        <h2>Staff Name</h2>
         <ion-input formControlName="staff_name"></ion-input>
-      </ion-item>
+      </div>
 
-      <ion-item>
-        <ion-label position="stacked">Staff Contact</ion-label>
+      <div class="field-item">
+        <h2>Staff Contact</h2>
         <ion-input formControlName="staff_contact"></ion-input>
-      </ion-item>
+      </div>
 
       <ion-item lines="full">
         <ion-label>Enabled</ion-label>

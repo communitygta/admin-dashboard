@@ -1,0 +1,47 @@
+.ql-editor {
+    color: #000000;
+    font-size: 16px;
+    font-family: "Open Sans", sans-serif !important;
+
+    h1 {
+        font-size: 20px;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+}
+
+.field-item {
+    padding: 20px;
+
+    h2 {
+        font-weight: bold;
+        font-size: 20px;
+        color: #333333;
+        margin: 0 0 10px 0;
+        border-left: 4px solid #6086FF;
+        padding-left: 10px;
+    }
+
+    ion-input,
+    ion-select {
+        border: 1px solid #cccccc;
+    }
+
+    .multiple-selection {
+        margin: 12px 0 10px;
+
+        ion-button {
+            --border-style: dashed;
+            --border-width: 1px;
+
+            &.selected {
+                --border-style: solid;
+                --border-width: 1px;
+                --background: var(--ion-color-primary);
+                --color: #ffffff;
+            }
+        }
+    }
+}

@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
 import { Observable } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { AppService } from 'src/app/core/services/app.service';
@@ -11,6 +12,7 @@ import { AuthService, UserRole } from 'src/app/core/services/auth.service';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
 import { InAppMessageService } from 'src/app/core/services/in-app-message.service';
 import { environment } from 'src/environments/environment';
+declare let Quill;
 
 @Component({
   selector: 'app-program-edit',
@@ -32,6 +34,19 @@ export class ProgramEditPage implements OnInit {
   availableOrganizations: Array<any>;
   currentOrganization;
   program$: Observable<any>;
+  descriptionEditor: any;
+  eligibilityEditor: any;
+  frequencyEditor: any;
+  howToApplyEditor: any;
+  editorConfig = {
+    modules: {
+      toolbar: [
+        [{ header: [1, 2, false] }],
+        ['bold', 'italic', 'underline'],
+      ]
+    },
+    theme: 'snow'
+  };
 
   constructor(
     private dashboardService: DashboardService,
@@ -113,6 +128,7 @@ export class ProgramEditPage implements OnInit {
               this.form.controls.organization.setValue(program.organization.id);
               this.initAddVideoLinkForm();
               this.initAddImageForm();
+              this.setupQuillEditors(program);
             })
           );
       })
@@ -121,6 +137,51 @@ export class ProgramEditPage implements OnInit {
 
   get logo() {
     return this.form.controls.logo;
+  }
+
+  setupQuillEditors(program) {
+    setTimeout(() => {
+      // init descriptionEditor
+      this.descriptionEditor = new Quill('#descriptionEditor', this.editorConfig);
+      const descriptionDelta = this.descriptionEditor.clipboard.convert(program.description || '');
+      this.descriptionEditor.setContents(descriptionDelta, 'api');
+      this.descriptionEditor.on('text-change', () => {
+        const converter = new QuillDeltaToHtmlConverter(this.descriptionEditor.getContents().ops, {});
+        const html = converter.convert();
+        this.form.controls.description.setValue(html);
+        this.form.markAsDirty();
+      });
+      // init eligibilityEditor
+      this.eligibilityEditor = new Quill('#eligibilityEditor', this.editorConfig);
+      const eligibilityDelta = this.eligibilityEditor.clipboard.convert(program.eligibility || '');
+      this.eligibilityEditor.setContents(eligibilityDelta, 'silent');
+      this.eligibilityEditor.on('text-change', () => {
+        const converter = new QuillDeltaToHtmlConverter(this.eligibilityEditor.getContents().ops, {});
+        const html = converter.convert();
+        this.form.controls.eligibility.setValue(html);
+        this.form.markAsDirty();
+      });
+      // init frequencyEditor
+      this.frequencyEditor = new Quill('#frequencyEditor', this.editorConfig);
+      const frequencyDelta = this.frequencyEditor.clipboard.convert(program.frequency || '');
+      this.frequencyEditor.setContents(frequencyDelta, 'silent');
+      this.frequencyEditor.on('text-change', () => {
+        const converter = new QuillDeltaToHtmlConverter(this.frequencyEditor.getContents().ops, {});
+        const html = converter.convert();
+        this.form.controls.frequency.setValue(html);
+        this.form.markAsDirty();
+      });
+      // init howToApplyEditor
+      this.howToApplyEditor = new Quill('#howToApplyEditor', this.editorConfig);
+      const howToApplyDelta = this.howToApplyEditor.clipboard.convert(program.how_to_apply || '');
+      this.howToApplyEditor.setContents(howToApplyDelta, 'silent');
+      this.howToApplyEditor.on('text-change', () => {
+        const converter = new QuillDeltaToHtmlConverter(this.howToApplyEditor.getContents().ops, {});
+        const html = converter.convert();
+        this.form.controls.how_to_apply.setValue(html);
+        this.form.markAsDirty();
+      });
+    }, 500);
   }
 
   initForm() {
@@ -296,6 +357,10 @@ export class ProgramEditPage implements OnInit {
       return;
     }
     const payload = Object.assign({}, this.form.value);
+    // console.log(this.descriptionEditor.root.innerHTML.trim());
+    // console.log(this.eligibilityEditor.root.innerHTML.trim());
+    // console.log(this.frequencyEditor.root.innerHTML.trim());
+    // console.log(this.howToApplyEditor.root.innerHTML.trim());
     delete payload.neighbourhood;
     const selectedLanguages = this.languages.filter(
       (language) => language.selected

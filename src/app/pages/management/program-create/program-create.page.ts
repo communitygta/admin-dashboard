@@ -9,6 +9,8 @@ import { AuthService, UserRole } from 'src/app/core/services/auth.service';
 import { DashboardService } from 'src/app/core/services/dashboard.service';
 import { InAppMessageService } from 'src/app/core/services/in-app-message.service';
 import { environment } from 'src/environments/environment';
+import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
+declare let Quill;
 
 @Component({
   selector: 'app-program-create',
@@ -29,6 +31,19 @@ export class ProgramCreatePage implements OnInit {
   );
   organizationId;
   availableOrganizations$: Observable<any>;
+  descriptionEditor: any;
+  eligibilityEditor: any;
+  frequencyEditor: any;
+  howToApplyEditor: any;
+  editorConfig = {
+    modules: {
+      toolbar: [
+        [{ header: [1, 2, false] }],
+        ['bold', 'italic', 'underline'],
+      ]
+    },
+    theme: 'snow'
+  };
 
   constructor(
     private dashboardService: DashboardService,
@@ -72,11 +87,57 @@ export class ProgramCreatePage implements OnInit {
     this.initForm();
     this.initAddVideoLinkForm();
     this.initAddImageForm();
+    this.setupQuillEditors();
   }
 
   getOrganizationSelections(neighbourhoodId) {
     this.availableOrganizations$ =
       this.dashboardService.getOrganizationsByNeighbourhoodId(neighbourhoodId);
+  }
+
+  setupQuillEditors() {
+    setTimeout(() => {
+      // init descriptionEditor
+      this.descriptionEditor = new Quill('#descriptionEditor', this.editorConfig);
+      const descriptionDelta = this.descriptionEditor.clipboard.convert('');
+      this.descriptionEditor.setContents(descriptionDelta, 'api');
+      this.descriptionEditor.on('text-change', () => {
+        const converter = new QuillDeltaToHtmlConverter(this.descriptionEditor.getContents().ops, {});
+        const html = converter.convert();
+        this.form.controls.description.setValue(html);
+        this.form.markAsDirty();
+      });
+      // init eligibilityEditor
+      this.eligibilityEditor = new Quill('#eligibilityEditor', this.editorConfig);
+      const eligibilityDelta = this.eligibilityEditor.clipboard.convert('');
+      this.eligibilityEditor.setContents(eligibilityDelta, 'silent');
+      this.eligibilityEditor.on('text-change', () => {
+        const converter = new QuillDeltaToHtmlConverter(this.eligibilityEditor.getContents().ops, {});
+        const html = converter.convert();
+        this.form.controls.eligibility.setValue(html);
+        this.form.markAsDirty();
+      });
+      // init frequencyEditor
+      this.frequencyEditor = new Quill('#frequencyEditor', this.editorConfig);
+      const frequencyDelta = this.frequencyEditor.clipboard.convert('');
+      this.frequencyEditor.setContents(frequencyDelta, 'silent');
+      this.frequencyEditor.on('text-change', () => {
+        const converter = new QuillDeltaToHtmlConverter(this.frequencyEditor.getContents().ops, {});
+        const html = converter.convert();
+        this.form.controls.frequency.setValue(html);
+        this.form.markAsDirty();
+      });
+      // init howToApplyEditor
+      this.howToApplyEditor = new Quill('#howToApplyEditor', this.editorConfig);
+      const howToApplyDelta = this.howToApplyEditor.clipboard.convert('');
+      this.howToApplyEditor.setContents(howToApplyDelta, 'silent');
+      this.howToApplyEditor.on('text-change', () => {
+        const converter = new QuillDeltaToHtmlConverter(this.howToApplyEditor.getContents().ops, {});
+        const html = converter.convert();
+        this.form.controls.how_to_apply.setValue(html);
+        this.form.markAsDirty();
+      });
+    }, 500);
   }
 
   initForm() {
