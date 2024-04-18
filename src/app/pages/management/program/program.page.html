@@ -43,7 +43,7 @@
         <div class="item-label">
           Description
         </div>
-        <ion-label>{{ program.description || 'N/A' }}</ion-label>
+        <ion-label [innerHTML]="program.description || 'N/A'"></ion-label>
       </div>
 
       <div class="form-item width-50">
@@ -57,7 +57,7 @@
         <div class="item-label">
           Eligibility
         </div>
-        <ion-label>{{ program.eligibility || 'N/A' }}</ion-label>
+        <ion-label [innerHTML]="program.eligibility || 'N/A'"></ion-label>
       </div>
 
       <div class="form-item width-50">
@@ -71,14 +71,14 @@
         <div class="item-label">
           Frequency
         </div>
-        <ion-label>{{ program.frequency || 'N/A' }}</ion-label>
+        <ion-label [innerHTML]="program.frequency || 'N/A'"></ion-label>
       </div>
 
       <div class="form-item width-50">
         <div class="item-label">
           How To Apply
         </div>
-        <ion-label>{{ program.how_to_apply || 'N/A' }}</ion-label>
+        <ion-label [innerHTML]="program.how_to_apply || 'N/A'"></ion-label>
       </div>
 
       <div class="form-item width-50">
@@ -129,7 +129,7 @@
         <div class="item-label">
           Staff Contact
         </div>
-        <ion-label>{{ program.staff_contact || 'N/A' }}</ion-label>
+        <ion-label [innerHTML]="program.staff_contact || 'N/A'"></ion-label>
       </div>
 
       <div class="form-item width-50">

@@ -35,6 +35,7 @@ export class ProgramCreatePage implements OnInit {
   eligibilityEditor: any;
   frequencyEditor: any;
   howToApplyEditor: any;
+  staffContactEditor: any;
   editorConfig = {
     modules: {
       toolbar: [
@@ -103,7 +104,10 @@ export class ProgramCreatePage implements OnInit {
       this.descriptionEditor.setContents(descriptionDelta, 'api');
       this.descriptionEditor.on('text-change', () => {
         const converter = new QuillDeltaToHtmlConverter(this.descriptionEditor.getContents().ops, {});
-        const html = converter.convert();
+        let html = converter.convert();
+        if (html === '<p><br/></p>') {
+          html = '';
+        }
         this.form.controls.description.setValue(html);
         this.form.markAsDirty();
       });
@@ -113,7 +117,10 @@ export class ProgramCreatePage implements OnInit {
       this.eligibilityEditor.setContents(eligibilityDelta, 'silent');
       this.eligibilityEditor.on('text-change', () => {
         const converter = new QuillDeltaToHtmlConverter(this.eligibilityEditor.getContents().ops, {});
-        const html = converter.convert();
+        let html = converter.convert();
+        if (html === '<p><br/></p>') {
+          html = '';
+        }
         this.form.controls.eligibility.setValue(html);
         this.form.markAsDirty();
       });
@@ -123,7 +130,10 @@ export class ProgramCreatePage implements OnInit {
       this.frequencyEditor.setContents(frequencyDelta, 'silent');
       this.frequencyEditor.on('text-change', () => {
         const converter = new QuillDeltaToHtmlConverter(this.frequencyEditor.getContents().ops, {});
-        const html = converter.convert();
+        let html = converter.convert();
+        if (html === '<p><br/></p>') {
+          html = '';
+        }
         this.form.controls.frequency.setValue(html);
         this.form.markAsDirty();
       });
@@ -133,8 +143,24 @@ export class ProgramCreatePage implements OnInit {
       this.howToApplyEditor.setContents(howToApplyDelta, 'silent');
       this.howToApplyEditor.on('text-change', () => {
         const converter = new QuillDeltaToHtmlConverter(this.howToApplyEditor.getContents().ops, {});
-        const html = converter.convert();
+        let html = converter.convert();
+        if (html === '<p><br/></p>') {
+          html = '';
+        }
         this.form.controls.how_to_apply.setValue(html);
+        this.form.markAsDirty();
+      });
+      // init staffContactEditor
+      this.staffContactEditor = new Quill('#staffContactEditor', this.editorConfig);
+      const staffContactDelta = this.staffContactEditor.clipboard.convert('');
+      this.staffContactEditor.setContents(staffContactDelta, 'silent');
+      this.staffContactEditor.on('text-change', () => {
+        const converter = new QuillDeltaToHtmlConverter(this.staffContactEditor.getContents().ops, {});
+        let html = converter.convert();
+        if (html === '<p><br/></p>') {
+          html = '';
+        }
+        this.form.controls.staff_contact.setValue(html);
         this.form.markAsDirty();
       });
     }, 500);
